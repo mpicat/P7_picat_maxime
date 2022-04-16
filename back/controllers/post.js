@@ -39,6 +39,7 @@ exports.deletePost = (req, res, next) => {
         else if (post.userId !== req.auth.userId) {
             return res.status(403).json({error : 'Requête non autorisée !'});
         }
+        // rajout autorisation si admin
         const filename = post.media.split('/images/')[1];
         fs.unlink(`images/${filename}`, () => {
             Post.destroy({where: {postId: req.params.id}})

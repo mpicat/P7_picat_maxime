@@ -25,6 +25,10 @@ const authMiddleware = (req, res, next) => {
         const userId = verifyUserToken(getTokenFromReqHeaders(req), getUserIdFromReqBody(req));
         req.auth = {userId};
         next();
+        // rajout contrôle admin
+        if (req.isAdmin && req.isAdmin === process.env.ADMIN_TOKEN) {
+            next()
+        }
     } catch (error) {
         res.status(403).json({error: 'Action non autorisée'});
     }

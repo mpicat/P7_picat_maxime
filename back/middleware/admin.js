@@ -9,11 +9,13 @@ const adminMiddleware = (req, res, next) => {
         const userId = verifyUserToken(getTokenFromReqHeaders(req));
         User.findOne({where: {admin: "Yes"}})
         .then(user => {
+            // THIS PATH CRASH THE APP and the admin can modificate a post
             if (user.userId === userId) {
                 console.log("Admin identifié !")
                 req.isAdmin = process.env.ADMIN_TOKEN;
                 next();
             }
+            // THIS PATH LOOKS OK
             console.log("Admin non identifié !")
             next();
         })
