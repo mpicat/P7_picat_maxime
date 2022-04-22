@@ -1,0 +1,73 @@
+$primary : rgba(253,45,1,255);
+$secondary: rgba(255,215,215,255);
+$tertiary: rgba(17,35,65,255);
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 25px;
+    padding-top: 50px;
+    h1 {
+        font-size: 2.1rem;
+        color: white;
+        text-transform: uppercase;
+        color: white;
+    }
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 25px;
+    width: 400px;
+    label {
+        color: white;
+        padding-left: 20px;
+        font-size: 1.1rem;
+    }
+    input {
+        margin-top: 5px;
+        padding: 15px;
+        border-radius: 50px;
+        width: 100%;
+        font-size: 1.1rem;
+    }
+    .form-btn {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin-top: 15px;
+        button {
+            padding: 15px;
+            border-radius: 50px;
+            border: none;
+            background-color: $primary;
+            color: white;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+    }
+}
+
+.require {
+    color: $secondary;
+    padding: 5px 0 0 15px;
+    height: 30px;
+}
+
+.btn-back {
+    padding-top: 25px;
+    width: 400px;
+    button {
+        border: 1px white solid;
+        padding: 15px;
+        border-radius: 50px;
+        color: white;
+        background-color: $tertiary;
+        width: 100%;
+        cursor: pointer;
+        font-size: 1.1rem;
+    }
+}

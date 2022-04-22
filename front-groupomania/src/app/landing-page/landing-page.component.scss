@@ -1,0 +1,93 @@
+$primary : rgba(253,45,1,255);
+$secondary: rgba(255,215,215,255);
+$tertiary: rgba(17,35,65,255);
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 10%;
+    height: 100%;
+}
+
+.accueil-img {
+    width: 35%;
+    img {
+        width: 100%;
+    }
+}
+
+.accueil-login {
+    width: fit-content;
+    padding: 45px 75px 25px;
+    background-color: $tertiary;
+    display: flex;
+    flex-direction: column;
+    row-gap: 25px;
+    align-items: center;
+    &__icon {
+        display: flex;
+        justify-content: center;
+        border-radius: 50%;
+        width: fit-content;
+        padding-top: 30px;
+        height: 130px;
+        width: 130px;
+        background-image: linear-gradient($primary, $secondary);
+        i {
+            font-size: 4rem;
+            color: $tertiary
+        }
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+        row-gap: 25px;
+        label {
+            color: white;
+            padding-left: 20px;
+            font-size: 1.1rem;
+        }
+        input {
+            padding: 15px;
+            border-radius: 50px;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+        .form-btn {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            button {
+                padding: 15px;
+                border-radius: 50px;
+                border: none;
+                background-color: $primary;
+                color: white;
+                cursor: pointer;
+                width: 100%;
+                font-size: 1.1rem;
+            }
+        }
+    }
+    &__btn {
+        padding-top: 25px;
+        width: 100%;
+        button {
+            border: 1px white solid;
+            padding: 15px;
+            border-radius: 50px;
+            color: white;
+            background-color: $tertiary;
+            width: 100%;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+    }
+}
+
+.require {
+    color: $secondary;
+    padding: 5px 0 0 15px;
+    height: 30px;
+}

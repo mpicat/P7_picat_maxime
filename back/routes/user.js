@@ -7,11 +7,11 @@ const {authMiddleware} = require('../middleware/auth');
 // rajout route admin sur delete et put
 
 router.post('/signup', checkPassword, userCtrl.signup);
-router.post('/login', userCtrl.login);
-router.delete('/delete', authMiddleware, userCtrl.deleteUser);
-router.put('/modify', authMiddleware, userCtrl.modifyUser);
-router.get('/logout', authMiddleware, userCtrl.logout);
 router.get('/verify/:confirmationToken', userCtrl.verify);
+router.post('/login', userCtrl.login);
+router.delete('/delete/:id', authMiddleware, userCtrl.deleteUser);
+router.put('/modify', authMiddleware, userCtrl.modifyUser);
+router.get('/logout/:id', authMiddleware, userCtrl.logout);
 
 
 module.exports = router;

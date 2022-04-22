@@ -14,10 +14,11 @@ const adminMiddleware = (req, res, next) => {
                 console.log("Admin identifié !")
                 req.isAdmin = process.env.ADMIN_TOKEN;
                 next();
+            } else {
+                // THIS PATH LOOKS OK
+                console.log("Admin non identifié !")
+                next();
             }
-            // THIS PATH LOOKS OK
-            console.log("Admin non identifié !")
-            next();
         })
         .catch((err) => res.status(404).json({error : 'Aucun admin dans la base de données'}))
         

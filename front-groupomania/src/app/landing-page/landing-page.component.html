@@ -1,0 +1,30 @@
+<main>
+    <div class="accueil-img">
+        <img src="../assets/icon-left-font-monochrome-white.png" alt="Icône de groupomania">
+    </div>
+    <div class="accueil-login">
+        <div class="accueil-login__icon"><i class="fa-solid fa-user"></i></div>
+        <form [formGroup]="userForm">
+            <div>
+                <label for="email">Email :</label>
+                <input type="email" formControlName="email" id="email" required>
+                <div class="require">
+                    <p *ngIf="email.errors?.['required']" >Ce champ est requis</p>
+                </div>
+            </div>
+            <div>
+                <label for="password">Mot de passe :</label>
+                <input type="password" formControlName="password" id="password" required>
+                <div class="require">
+                    <p *ngIf="password.errors?.['required']" >Ce champ est requis</p>
+                </div>
+            </div>
+            <div (click)="userLogin()" class="form-btn">
+                <button>Se connecter</button>
+            </div>
+        </form>
+        <div class="accueil-login__btn">
+            <button (click)="onSignup()">Pas encore de compte ?</button>
+        </div>
+    </div>
+</main>

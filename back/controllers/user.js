@@ -11,15 +11,15 @@ const serverErrorMess = 'Erreur, veuillez réessayer plus tard...';
 // enregistrement d'un nouvel utilisateur
 exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
-    .then(hash => {
-        const user = User.create({
+    .then(async hash => {
+        const user = await User.create({
             name: req.body.name,
             email: req.body.email,
             password: hash,
             status: 'Pending',
             confirmationToken: randomstring.generate(),
             admin: 'NO'
-        })
+        });
         sgMail.setApiKey(API_KEY)
         const message = {
             to: req.body.email,
@@ -29,7 +29,8 @@ exports.signup = (req, res, next) => {
             },
             subject: 'Email de confirmation',
             // TO DO : rajouter le lien de confirmation
-            text: 'Bonjour et bienvenue sur Groupomania ! Veuillez confirmer votre email en cliquant sur le lien suivant LIEN !'
+            text: 'Bonjour et bienvenue sur Groupomania ! Pour activer votre email, veuillez activer le mode html de votre boîte de réception !',
+            html: `<h1>Bonjour et bienvenue sur Groupomania !</h1><br><p>Veuillez confirmer votre email en cliquant sur le lien suivant : <a href="http://localhost:3000/api/auth/verify/${user.confirmationToken}">Cliquez ici</a> !</p>`,
         };
         sgMail.send(message)
         .then(res => console.log('Mail envoyé'))
@@ -94,7 +95,7 @@ exports.login = async (req, res, next) => {
 
 // suppression d'utilisateur
 exports.deleteUser = (req, res, next) => {
-    User.findOne({where: {userId: req.body.userId}})
+    User.findOne({where: {userId: req.params.id}})
     .then((user) => {
         if(!user) {
             return res.status(404).json({error : 'Utilisateur non trouvé !'});
@@ -102,7 +103,7 @@ exports.deleteUser = (req, res, next) => {
         if(user.userId !== req.auth.userId) {
             return res.status(403).json({error : 'Requête non autorisée !'});
         }
-        User.destroy({where: {userId: req.body.userId}})
+        User.destroy({where: {userId: req.params.id}})
         .then(() => res.status(200).json({ message: 'Utilisateur supprimé !'}))
         .catch(error => res.status(400).json({message: 'Utilisateur non supprimé !'}));
     })
@@ -128,7 +129,7 @@ exports.modifyUser = (req, res, next) => {
 
 // logout d'utilisateur (TEST)
 exports.logout = (req, res, next) => {
-    User.findOne({where: {userId: req.body.userId}})
+    User.findOne({where: {userId: req.params.id}})
     .then((user) => {
         if(!user) {
             return res.status(404).json({error : 'Utilisateur non trouvé !'});

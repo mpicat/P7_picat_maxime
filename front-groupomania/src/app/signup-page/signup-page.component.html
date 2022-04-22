@@ -1,0 +1,37 @@
+<main>
+    <div class="main-img">
+        <img src="../assets/logo-simple.png" alt="Icône de Groupomania">
+    </div>
+    <h1>Inscription</h1>
+    <form [formGroup]= "userForm">
+        <div>
+            <label for="name">Nom :</label>
+            <input type="text" formControlName="name" id="name" required>
+            <div class="require">
+                <p *ngIf="name.errors?.['required']" >Ce champ est requis</p>
+            </div>
+        </div>
+        <div>
+            <label for="email">Email :</label>
+            <input type="email" formControlName='email' id="email" required>
+            <div class="require">
+                <p *ngIf="email.errors?.['required']" >Ce champ est requis</p>
+                <p *ngIf="email.errors?.['pattern']" >Ce champ est non valide</p>
+            </div>
+        </div>
+        <div>
+            <label for="password">Mot de passe :</label>
+            <input type="password" formControlName='password' id="password" required>
+            <div class="require">
+                <p *ngIf="password.errors?.['required']" >Ce champ est requis</p>
+                <p *ngIf="password.errors?.['pattern']" >Ce champ doit contenir au moins 10 caractères, dont au minimum une lettre minuscule, une lettre majuscule et un chiffre</p>
+            </div>
+        </div>
+        <div (click)="userSignup()" class="form-btn">
+            <button>S'enregistrer</button>
+        </div>
+    </form>
+    <div class="btn-back">
+        <button (click)="onLanding()">Retour à la page de connexion</button>
+    </div>
+</main>

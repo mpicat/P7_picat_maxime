@@ -131,7 +131,7 @@ exports.likeComment = async (req, res, next) => {
                 })
                 .then(() => res.status(200).json({message: "Vous avez disliké"}))
                 .catch((error) => res.status(400).json({message: "Une erreur est intervenue lorsque vous avez voulu disliker"}))
-            } 
+            }
             break;
 
         default: console.log("Une erreur est intervenue");

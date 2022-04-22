@@ -11,6 +11,10 @@ const getUserIdFromReqBody = (req) => {
     return reqUserId;
 }
 
+const isAdmin = (req) => {
+    return req.isAdmin && req.isAdmin === process.env.ADMIN_TOKEN;
+}
+
 const verifyUserToken = (token, reqUserId) => {
     const decodedToken = jwt.verify(token, process.env.SECRET_TOKEN);
     const userId = decodedToken.userId;
@@ -24,10 +28,11 @@ const authMiddleware = (req, res, next) => {
     try {
         const userId = verifyUserToken(getTokenFromReqHeaders(req), getUserIdFromReqBody(req));
         req.auth = {userId};
-        next();
-        // rajout contrôle admin
-        if (req.isAdmin && req.isAdmin === process.env.ADMIN_TOKEN) {
-            next()
+        // !! = inverse de falsy
+        if (isAdmin(req) || !!userId) {
+            next();
+        } else {
+            throw 'Token non valable !';
         }
     } catch (error) {
         res.status(403).json({error: 'Action non autorisée'});
@@ -38,5 +43,6 @@ module.exports = {
     getTokenFromReqHeaders,
     getUserIdFromReqBody,
     verifyUserToken,
-    authMiddleware
+    authMiddleware,
+    isAdmin
 };
