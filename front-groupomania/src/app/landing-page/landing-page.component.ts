@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ApiserviceService } from '../apiservice.service';
+import { ApiserviceService } from '../services/apiservice.service';
 
 @Component({
   selector: 'app-landing-page',
@@ -25,11 +25,14 @@ export class LandingPageComponent implements OnInit {
   get password() { return this.userForm.get('password'); }
 
   // login user
-  userLogin() {
-    if(this.userForm.valid) {
-    this.service.login(this.userForm.value).subscribe((res) => {
+  onLogin() {
+    const val = this.userForm.value;
+
+    if(val.email && val.password) {
+    this.service.login(val.email, val.password).subscribe((res) => {
+      // if !user : msg this mail or password is false
+      // else
       console.log('Vous êtes correctement connecté');
-      this.service.setJwt(res.token);
       this.onContinue();
     });
     } else {

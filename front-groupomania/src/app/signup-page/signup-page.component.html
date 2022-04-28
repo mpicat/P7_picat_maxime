@@ -8,27 +8,27 @@
             <label for="name">Nom :</label>
             <input type="text" formControlName="name" id="name" required>
             <div class="require">
-                <p *ngIf="name.errors?.['required']" >Ce champ est requis</p>
+                <p *ngIf="name.errors?.['required']" ><i class="fa-solid fa-triangle-exclamation"></i> Ce champ est requis</p>
             </div>
         </div>
         <div>
             <label for="email">Email :</label>
             <input type="email" formControlName='email' id="email" required>
             <div class="require">
-                <p *ngIf="email.errors?.['required']" >Ce champ est requis</p>
-                <p *ngIf="email.errors?.['pattern']" >Ce champ est non valide</p>
+                <p *ngIf="email.errors?.['required']" ><i class="fa-solid fa-triangle-exclamation"></i> Ce champ est requis</p>
+                <p *ngIf="email.errors?.['pattern']" ><i class="fa-solid fa-triangle-exclamation"></i> Ce champ est non valide</p>
             </div>
         </div>
         <div>
             <label for="password">Mot de passe :</label>
             <input type="password" formControlName='password' id="password" required>
             <div class="require">
-                <p *ngIf="password.errors?.['required']" >Ce champ est requis</p>
-                <p *ngIf="password.errors?.['pattern']" >Ce champ doit contenir au moins 10 caractères, dont au minimum une lettre minuscule, une lettre majuscule et un chiffre</p>
+                <p *ngIf="password.errors?.['required']" ><i class="fa-solid fa-triangle-exclamation"></i> Ce champ est requis</p>
+                <p *ngIf="password.errors?.['pattern']" ><i class="fa-solid fa-triangle-exclamation"></i> Ce champ doit contenir au moins 10 caractères, dont au minimum une lettre minuscule, une lettre majuscule et un chiffre</p>
             </div>
         </div>
         <div (click)="userSignup()" class="form-btn">
-            <button>S'enregistrer</button>
+            <button [disabled]="name.errors?.['required'] || email.errors?.['required'] || email.errors?.['pattern'] || password.errors?.['required'] || password.errors?.['pattern']">S'enregistrer</button>
         </div>
     </form>
     <div class="btn-back">

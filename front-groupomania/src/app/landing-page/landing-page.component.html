@@ -9,18 +9,18 @@
                 <label for="email">Email :</label>
                 <input type="email" formControlName="email" id="email" required>
                 <div class="require">
-                    <p *ngIf="email.errors?.['required']" >Ce champ est requis</p>
+                    <p *ngIf="email.errors?.['required']" ><i class="fa-solid fa-triangle-exclamation"></i> Ce champ est requis</p>
                 </div>
             </div>
             <div>
                 <label for="password">Mot de passe :</label>
                 <input type="password" formControlName="password" id="password" required>
                 <div class="require">
-                    <p *ngIf="password.errors?.['required']" >Ce champ est requis</p>
+                    <p *ngIf="password.errors?.['required']" ><i class="fa-solid fa-triangle-exclamation"></i> Ce champ est requis</p>
                 </div>
             </div>
-            <div (click)="userLogin()" class="form-btn">
-                <button>Se connecter</button>
+            <div class="form-btn">
+                <button (click)="onLogin()" [disabled]="email.errors?.['required'] || password.errors?.['required']">Se connecter</button>
             </div>
         </form>
         <div class="accueil-login__btn">

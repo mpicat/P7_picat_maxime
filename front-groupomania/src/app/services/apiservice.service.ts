@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -36,8 +36,14 @@ export class ApiserviceService {
   }
 
   // login User
-  login(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/auth/login`, data);
+  login(email:string, password: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/login`, {email, password}).pipe(
+      // tap allows to do extra effects in observable
+      tap((res: any) => {
+        localStorage.setItem('id_token', res.token);
+        localStorage.setItem('id_user', res.userId);
+      })
+    );
   }
 
   // delete User
@@ -55,7 +61,19 @@ export class ApiserviceService {
   // logout User
   logout(id: any): Observable<any> {
     let ids = id;
-    return this.http.get(`${this.apiUrl}/auth/logout/${ids}`);
+    return this.http.get(`${this.apiUrl}/auth/logout/${ids}`).pipe(
+      // tap allows to do extra effects in observable
+      tap((res: any) => {
+        localStorage.removeItem('id_token');
+        localStorage.removeItem('id_user');
+      })
+    );
+  }
+
+  // récupération d'un user
+  getOneUser(id: any): Observable<any> {
+    let ids = id;
+    return this.http.get(`${this.apiUrl}/auth/${ids}`);
   }
 
 

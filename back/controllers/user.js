@@ -143,3 +143,10 @@ exports.logout = (req, res, next) => {
     })
     .catch(error => res.status(500).json({serverErrorMess}));
 };
+
+// récupération du user
+exports.getOneUser = (req, res, next) => {
+    User.findOne({where : {userId: req.params.id}})
+    .then(user => res.status(200).json(user.name))
+    .catch(error => res.status(404).json({message: "User non trouvé !"}));
+};

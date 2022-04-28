@@ -12,6 +12,7 @@ router.post('/login', userCtrl.login);
 router.delete('/delete/:id', authMiddleware, userCtrl.deleteUser);
 router.put('/modify', authMiddleware, userCtrl.modifyUser);
 router.get('/logout/:id', authMiddleware, userCtrl.logout);
+router.get('/:id', authMiddleware, userCtrl.getOneUser);
 
 
 module.exports = router;
