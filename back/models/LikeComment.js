@@ -10,19 +10,11 @@ const LikeComment = sequelize.define('likecomment', {
     },
     commentId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model:'Comment',
-          key: 'comment_id'
-        }
+        type: Sequelize.INTEGER
     },
     userId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model:'User',
-          key: 'user_id'
-        }
+        type: Sequelize.INTEGER
     },
     likeType: { type: Sequelize.STRING, allowNull:false },
     createdAt: { type: Sequelize.DATE, allowNull:false },

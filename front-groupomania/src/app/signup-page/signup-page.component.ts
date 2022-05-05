@@ -35,6 +35,7 @@ export class SignupPageComponent implements OnInit {
       this.service.signup(this.userForm.value).subscribe((res) => {
         this.userForm.reset();
         alert('Vous vous êtes correctement inscrit !');
+        this.onLanding();
       });
     }
     else {

@@ -22,6 +22,9 @@
             <div class="form-btn">
                 <button (click)="onLogin()" [disabled]="email.errors?.['required'] || password.errors?.['required']">Se connecter</button>
             </div>
+            <div class="require">
+                <p *ngIf="loginError" ><i class="fa-solid fa-triangle-exclamation"></i> Problème avec vos identifiants, veuillez réessayer</p>
+            </div>
         </form>
         <div class="accueil-login__btn">
             <button (click)="onSignup()">Pas encore de compte ?</button>

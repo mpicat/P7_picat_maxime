@@ -1,29 +1,52 @@
 require('dotenv').config();
 const Post = require('../models/Post');
+const User = require('../models/User');
 const LikePost = require('../models/LikePost');
 const fs = require('fs');
+const sequelize = require('../utils/database');
 const serverErrorMess =  "Erreur, veuillez réessayer plus tard...";
 
 // récupération de tous les posts
 exports.getAllPosts = (req, res, next) => {
-    Post.findAll()
-    .then(posts => res.status(200).json(posts))
+    Post.findAll({
+        include: [{
+            model: User,
+            attributes: ['name'] 
+        },{
+            model: LikePost,
+            attributes: ['likeType', 'userId']
+        }]
+    })
+    .then(posts => {
+        res.status(200).json(posts);
+    })
     .catch(error => res.status(400).json({message: "Posts non trouvés !"}));
 };
 
 // récupération d'un post
 exports.getOnePost = (req, res, next) => {
-    Post.findOne({where : {postId: req.params.id}})
+    Post.findOne(
+        {include: {
+            model: User,
+            attributes: ['name'] 
+        },
+        where : {postId: req.params.id}})
     .then(post => res.status(200).json(post))
     .catch(error => res.status(404).json({message: "Post non trouvé !"}));
 };
 
 // création d'un post
 exports.createPost = (req, res, next) => {
-    const postObject = JSON.parse(req.body.post);
+    const postObject = req.file ?
+        {
+            ...JSON.parse(req.body.post),
+            media: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        } : {...req.body};
+    
     const post = Post.create({
         ...postObject,
-        media: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        likes: 0,
+        dislikes: 0
     })
     .then(() => res.status(201).json({message: "Post créé !"}))
     .catch(error => res.status(400).json({message: "Post non créé"}));
@@ -37,13 +60,17 @@ exports.deletePost = (req, res, next) => {
             res.status(404).json({error : 'Post non trouvé !'});
         } else if (post.userId !== req.auth.userId && !isAdmin(req)) {
             res.status(403).json({error : 'Requête non autorisée !'});
-        } else {
+        } else if (post.media) {
             const filename = post.media.split('/images/')[1];
             fs.unlink(`images/${filename}`, () => {
                 Post.destroy({where: {postId: req.params.id}})
-                .then(() => res.status(200).json({ message: 'Post supprimé !'}))
-                .catch(error => res.status(400).json({ message: 'Post non supprimé !'}));
+                .then(() => res.status(200).json({ message: 'Post et image supprimés !'}))
+                .catch(error => res.status(400).json({ message: 'Post et image non supprimés !'}));
             });
+        } else {
+            Post.destroy({where: {postId: req.params.id}})
+            .then(() => res.status(200).json({ message: 'Post supprimé !'}))
+            .catch(error => res.status(400).json({ message: 'Post non supprimé !'}));
         }
     })
     .catch(error => res.status(500).json({serverErrorMess}));
@@ -83,8 +110,16 @@ exports.likePost = async (req, res, next) => {
             }
             else if (noOpinionPost){
                 LikePost.update({likeType: "like"}, {where: {postId: req.params.id, userId: req.body.userId}})
-                    .then(() => res.status(200).json({ message: "Vous avez liké" }))
+                    .then(() => 
+                        // augmente les likes de 1 sur le model Post
+                        Post.update(
+                            {likes: sequelize.literal('likes + 1')},
+                            {where: {postId: req.params.id}})
+                        .then(() => res.status(200).json({ message: "Vous avez liké" }))
+                        .catch((error) => res.status(400).json({ message: "Une erreur est intervenue" }))
+                    )
                     .catch((error) => res.status(400).json({ message: "Une erreur est intervenue" }))
+                
             }
             else { 
                 LikePost.create({
@@ -92,7 +127,14 @@ exports.likePost = async (req, res, next) => {
                     userId: req.body.userId,
                     likeType: "like"
                 })
-                .then(() => res.status(200).json({message: "Vous avez liké"}))
+                .then(() => 
+                    // augmente les likes de 1 sur le model Post
+                    Post.update(
+                        {likes: sequelize.literal('likes + 1')},
+                        {where: {postId: req.params.id}})
+                    .then(() => res.status(200).json({ message: "Vous avez liké" }))
+                    .catch((error) => res.status(400).json({ message: "Une erreur est intervenue" }))
+                )
                 .catch((error) => res.status(400).json({message: "Une erreur est intervenue lorsque vous avez voulu liker"}))
             } 
             break;
@@ -100,13 +142,27 @@ exports.likePost = async (req, res, next) => {
         case "" :
             if (likedPost) {
                 LikePost.update({likeType: ""}, {where: {postId: req.params.id, userId: req.body.userId}})
-                    .then(() => res.status(200).json({ message: "Vous ne likez plus" }))
-                    .catch((error) => res.status(400).json({ message: "Une erreur est intervenue lorsque vous avez voulu retirer votre vote" }))
+                .then(() => 
+                    // diminue les likes de 1 sur le model Post
+                    Post.update(
+                        {likes: sequelize.literal('likes - 1')},
+                        {where: {postId: req.params.id}})
+                    .then(() => res.status(200).json({ message: "Vous ne likez plus ce post" }))
+                    .catch((error) => res.status(400).json({ message: "Une erreur est intervenue" }))
+                )
+                .catch((error) => res.status(400).json({ message: "Une erreur est intervenue lorsque vous avez voulu retirer votre vote" }))
             }
             else if (dislikedPost) { 
                 LikePost.update({likeType: ""}, {where: {postId: req.params.id, userId: req.body.userId}})
-                    .then(() => res.status(200).json({ message: "Vous ne dislikez plus" }))
-                    .catch((error) => res.status(400).json({ message: "Une erreur est intervenue lorsque vous avez voulu retirer votre vote" }))
+                .then(() => 
+                    // diminue les dislikes de 1 sur le model Post
+                    Post.update(
+                        {dislikes: sequelize.literal('dislikes - 1')},
+                        {where: {postId: req.params.id}})
+                    .then(() => res.status(200).json({ message: "Vous ne dislikez plus ce post" }))
+                    .catch((error) => res.status(400).json({ message: "Une erreur est intervenue" }))
+                )
+                .catch((error) => res.status(400).json({ message: "Une erreur est intervenue lorsque vous avez voulu retirer votre vote" }))
             }
             else { 
                 res.status(400).json({message: "Vous n'avez pas voté pour ce post"});
@@ -122,8 +178,15 @@ exports.likePost = async (req, res, next) => {
             }
             else if (noOpinionPost){
                 LikePost.update({likeType: "dislike"}, {where: {postId: req.params.id, userId: req.body.userId}})
+                .then(() => 
+                    // augmente les dislikes de 1 sur le model Post
+                    Post.update(
+                        {dislikes: sequelize.literal('dislikes + 1')},
+                        {where: {postId: req.params.id}})
                     .then(() => res.status(200).json({ message: "Vous avez disliké" }))
                     .catch((error) => res.status(400).json({ message: "Une erreur est intervenue" }))
+                )
+                .catch((error) => res.status(400).json({ message: "Une erreur est intervenue" }))
             }
             else { 
                 LikePost.create({
@@ -131,7 +194,14 @@ exports.likePost = async (req, res, next) => {
                     userId: req.body.userId,
                     likeType: "dislike"
                 })
-                .then(() => res.status(200).json({message: "Vous avez disliké"}))
+                .then(() => 
+                        // augmente les dislikes de 1 sur le model Post
+                        Post.update(
+                            {dislikes: sequelize.literal('dislikes + 1')},
+                            {where: {postId: req.params.id}})
+                        .then(() => res.status(200).json({ message: "Vous avez disliké" }))
+                        .catch((error) => res.status(400).json({ message: "Une erreur est intervenue" }))
+                    )
                 .catch((error) => res.status(400).json({message: "Une erreur est intervenue lorsque vous avez voulu disliker"}))
             } 
             break;

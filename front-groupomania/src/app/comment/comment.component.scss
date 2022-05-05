@@ -1,0 +1,59 @@
+$primary : rgba(253,45,1,255);
+$secondary: rgba(255,215,215,255);
+$tertiary: rgba(17,35,65,255);
+
+// posts
+.comments{
+    display: flex;
+    flex-direction: column;
+    row-gap: 15px;
+    background-color: $secondary;
+    border-radius: 10px;
+    margin-bottom: 15px;
+        &-title {
+            padding: 10px 25px;
+            font-size: 1.1rem;
+            display: flex;
+            flex-direction: column;
+            &__created, &__updated {
+                font-size: 0.9rem;
+            }
+            button {
+                width: fit-content;
+            }
+        }
+        
+        &-media {
+            width: 100%;
+        }
+        &-text {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            row-gap: 15px;
+            &__opinions {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                &-others, &-myself {
+                    display: flex;
+                    column-gap: 15px;
+                }
+                &-myself {
+                    display: flex;
+                    justify-content: center;
+                    column-gap: 15px;
+                    button {
+                        background-color: $primary;
+                        border: none;
+                        padding: 7px;
+                        border-radius: 5px;
+                        cursor: pointer;
+                    }
+                    .green {
+                        background-color: green;
+                    }
+                }
+            }
+        }
+}

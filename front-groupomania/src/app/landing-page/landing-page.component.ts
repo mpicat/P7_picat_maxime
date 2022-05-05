@@ -13,6 +13,7 @@ export class LandingPageComponent implements OnInit {
   constructor(private service: ApiserviceService, private router: Router) { }
 
   userForm: any;
+  loginError = false;
 
   ngOnInit(): void {
     this.userForm = new FormGroup({
@@ -29,12 +30,13 @@ export class LandingPageComponent implements OnInit {
     const val = this.userForm.value;
 
     if(val.email && val.password) {
-    this.service.login(val.email, val.password).subscribe((res) => {
-      // if !user : msg this mail or password is false
-      // else
-      console.log('Vous êtes correctement connecté');
-      this.onContinue();
-    });
+      this.service.login(val.email, val.password).subscribe((res) => {
+        // if !user : msg this mail or password is false
+        console.log('Vous êtes correctement connecté');
+        this.onContinue();
+      }, err => {
+        this.loginError = true;
+      });
     } else {
       alert('Tous les champs sont requis !')
     }

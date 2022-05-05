@@ -1,0 +1,28 @@
+<div class="comments">
+    <div class="comments-title">
+        <p class="comments-title__user">{{ comment.user.name }}</p>
+        <p class="comments-title__created">Publié le {{ comment.createdAt | date: "d MMMM yyyy à HH:mm" }}</p>
+        <p class="comments-title__updated">Modifié le {{ comment.updatedAt | date: "d MMMM yyyy à HH:mm" }}</p>
+        <button (click)="onViewComment()">Visualiser</button>
+    </div>
+
+    <img class="comments-media" *ngIf="comment.media" [src]="comment.media" alt="image de comment">
+
+    <div class="comments-text">
+        <p class="comments-text__content">{{ comment.content }}</p>
+
+        <div class="comments-text__opinions">
+            <div class="comments-text__opinions-others">
+                <p><i class="fa-solid fa-heart"></i> {{ comment.likes }}</p>
+                <p><i class="fa-solid fa-heart-crack"></i> {{ comment.dislikes }}</p>
+            </div>
+            <div class="comments-text__opinions-myself">
+                <button class="green" (click)="onLike()"><i class="fa-solid fa-heart"></i> {{ buttonTextLikeComment }}</button>
+                <button (click)="onDislike()"><i class="fa-solid fa-heart-crack"></i> {{ buttonTextDislikeComment }}</button>
+            </div>
+        </div>
+        <div class="require">
+            <p *ngIf="opinionError" ><i class="fa-solid fa-triangle-exclamation"></i> Vous devez d'abord retirer votre premier choix</p>
+        </div>
+    </div>
+</div>

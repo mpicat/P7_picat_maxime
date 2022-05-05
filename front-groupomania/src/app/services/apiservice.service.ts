@@ -42,37 +42,46 @@ export class ApiserviceService {
       tap((res: any) => {
         localStorage.setItem('id_token', res.token);
         localStorage.setItem('id_user', res.userId);
+        localStorage.setItem('name_user', res.name);
       })
     );
   }
 
   // delete User
-  deleteUser(id: any): Observable<any> {
-    let ids = id;
-    return this.http.delete(`${this.apiUrl}/auth/delete${ids}`);
+  deleteUser(userId: any): Observable<any> {
+    let ids = userId;
+    return this.http.delete(`${this.apiUrl}/auth/delete/${ids}`).pipe(
+      // tap allows to do extra effects in observable
+      tap((res: any) => {
+        localStorage.removeItem('id_token');
+        localStorage.removeItem('id_user');
+        localStorage.removeItem('name_user');
+      })
+    );
   }
 
   // modify User
-  modifyUser(data: any, id: any): Observable<any> {
-    let ids = id;
-    return this.http.put(`${this.apiUrl}/auth/modify/${ids}`, data);
+  modifyUser(userId: any, name: any, email: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/auth/modify`, {userId, name, email});
   }
 
   // logout User
   logout(id: any): Observable<any> {
     let ids = id;
+    console.log(ids);
     return this.http.get(`${this.apiUrl}/auth/logout/${ids}`).pipe(
       // tap allows to do extra effects in observable
       tap((res: any) => {
         localStorage.removeItem('id_token');
         localStorage.removeItem('id_user');
+        localStorage.removeItem('name_user');
       })
     );
   }
 
   // récupération d'un user
-  getOneUser(id: any): Observable<any> {
-    let ids = id;
+  getOneUser(userId: any): Observable<any> {
+    let ids = userId;
     return this.http.get(`${this.apiUrl}/auth/${ids}`);
   }
 
@@ -80,7 +89,6 @@ export class ApiserviceService {
   // ROUTES POSTS
 
   // récupération de tous les posts
-  // TODO use headers to pass the jwt => google "angular http client pass jwt token"
   getAllPosts(): Observable<any> {
     return this.http.get(`${this.apiUrl}/posts`);
   }
@@ -92,27 +100,36 @@ export class ApiserviceService {
   }
 
   // création d'un post
-  createPost(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/posts`, data);
+  createPost(userId: any, content: any, formData: any): Observable<any> {
+    if (formData == null) {
+      return this.http.post(`${this.apiUrl}/posts`, {userId, content});
+    }
+    else {
+      return this.http.post(`${this.apiUrl}/posts`, formData);
+    }
   }
 
   // suppression d'un post
-  deletePost(id: any): Observable<any> {
-    let ids = id;
+  deletePost(postId: any): Observable<any> {
+    let ids = postId;
     return this.http.delete(`${this.apiUrl}/posts/${ids}`);
   }
 
-  // modification d'un post
-  // adapt the header if there is a pic
-  modifyPost(data: any, id: any): Observable<any> {
-    let ids = id;
-    return this.http.put(`${this.apiUrl}/posts/${ids}`, data);
+  // modification d'un post text
+  modifyPost(postId: any, userId: any, content: any, formData: any): Observable<any> {
+    let ids = postId;
+    if (formData == null) {
+      return this.http.put(`${this.apiUrl}/posts/${ids}`, {userId, content});
+    }
+    else {
+      return this.http.put(`${this.apiUrl}/posts/${ids}`, formData);
+    }
   }
 
   // like et dislike d'un post
-  likePost(data: any, id:any): Observable<any> {
-    let ids = id;
-    return this.http.post(`${this.apiUrl}/posts/${ids}/like`, data);
+  likePost(postId: any, userId: any, like: any): Observable<any> {
+    let ids = postId;
+    return this.http.post(`${this.apiUrl}/posts/${ids}/like`, {userId, like});
   }
 
   // ROUTES COMMENT
@@ -129,8 +146,13 @@ export class ApiserviceService {
   }
 
   // création d'un comment
-  createComment(data: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/comments`, data);
+  createComment(userId: any, content: any, formData: any): Observable<any> {
+    if (formData == null) {
+      return this.http.post(`${this.apiUrl}/comments`, {userId, content});
+    }
+    else {
+      return this.http.post(`${this.apiUrl}/comments`, formData);
+    }
   }
 
   // suppression d'un comment
@@ -146,9 +168,9 @@ export class ApiserviceService {
   }
 
   // like et dislike d'un comment
-  likeComment(data: any, id:any): Observable<any> {
-    let ids = id;
-    return this.http.post(`${this.apiUrl}/comments/${ids}/like`, data);
+  likeComment(commentId: any, userId: any, like: any): Observable<any> {
+    let ids = commentId;
+    return this.http.post(`${this.apiUrl}/comments/${ids}/like`, {userId, like});
   }
 
 }

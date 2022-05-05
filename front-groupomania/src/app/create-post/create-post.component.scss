@@ -1,0 +1,50 @@
+$primary : rgba(253,45,1,255);
+$secondary: rgba(255,215,215,255);
+$tertiary: rgba(17,35,65,255);
+
+// form
+.formPost {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 50px;
+    form {
+        display: flex;
+        flex-direction: column;
+        row-gap: 15px;
+        width: 65%;
+        margin: auto;
+        div {
+            display: flex;
+            flex-direction: column;
+        }
+        textarea {
+            padding: 5px;
+            border-radius: 10px;
+            font-size: 1.1rem;
+        }
+        input {
+            color: white;
+        }
+        .form-btn {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            margin: auto;
+            button {
+                padding: 15px;
+                border-radius: 50px;
+                border: none;
+                background-color: green;
+                color: white;
+                cursor: pointer;
+                width: 100%;
+                font-size: 1.1rem;
+                &:disabled {
+                    cursor: default;
+                    background-color: $primary;
+                }
+            }
+        }
+    }
+}

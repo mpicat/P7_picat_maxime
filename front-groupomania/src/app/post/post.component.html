@@ -1,0 +1,34 @@
+<div class="posts">
+    <div class="posts-title">
+        <p class="posts-title__user">{{ post.user.name }} et postId: {{ post.postId}}</p>
+        <p class="posts-title__created">Publiée le {{ post.createdAt | date: "d MMMM yyyy à HH:mm" }}</p>
+        <p class="posts-title__updated">Modifiée le {{ post.updatedAt | date: "d MMMM yyyy à HH:mm" }}</p>
+        <button (click)="onViewPost()">Visualiser</button>
+    </div>
+
+    <img class="posts-media" *ngIf="post.media" [src]="post.media" alt="image de post">
+
+    <div class="posts-text">
+        <p class="posts-text__content">{{ post.content }}</p>
+
+        <div class="posts-text__opinions">
+            <div class="posts-text__opinions-others">
+                <p><i class="fa-solid fa-heart"></i> {{ post.likes }}</p>
+                <p><i class="fa-solid fa-heart-crack"></i> {{ post.dislikes }}</p>
+            </div>
+            <div class="posts-text__opinions-myself">
+                <button class="green" (click)="onLike()"><i class="fa-solid fa-heart"></i> {{ buttonTextLike }}</button>
+                <button (click)="onDislike()"><i class="fa-solid fa-heart-crack"></i> {{ buttonTextDislike }}</button>
+            </div>
+        </div>
+        <div class="require">
+            <p *ngIf="opinionError" ><i class="fa-solid fa-triangle-exclamation"></i> Vous devez d'abord retirer votre premier choix</p>
+        </div>
+
+        <app-create-comment></app-create-comment>
+
+        <div *ngFor="let comment of reverseReadDataComments" >
+            <app-comment *ngIf="comment.postId === post.postId" [comment]="comment">{{ comment }}</app-comment>
+        </div>
+    </div>
+</div>

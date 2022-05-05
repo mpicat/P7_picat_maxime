@@ -1,42 +1,5 @@
 <main>
-    <div class="main-title">
-        <div class="main-title__hello">
-            <h1>{{ message }}</h1>
-        </div>
-        <div class="main-title__profil">
-            <button>Mon profil</button>
-        </div>
-        <div class="main-title__disconnect">
-            <!-- ajouter click -->
-            <button>Se deconnecter</button>
-        </div>
-    </div>
-
-    <div class="main-form">
-        <form [formGroup]= "postForm">
-            <legend>Créer un nouveau post</legend>
-            <div>
-                <label for="content">Contenu :</label>
-                <input type="text" formControlName="content" id="content">
-            </div>
-            <div>
-                <label for="media">Media :</label>
-                <input type="text" formControlName="media" id="media">
-            </div>
-            <!-- ajouter click -->
-            <div class="form-btn">
-                <button [disabled]="content.errors?.['required'] && media.errors?.['required']">Poster</button>
-            </div>
-        </form>
-    </div>
-    
-    <div class="main-groupomania">
-        <div *ngFor="let post of readData" class="main-groupomania__posts">
-            <p>{{ post.userId }}</p>
-            <img [src]="post.media" alt="image de post">
-            <p>{{ post.content }}</p>
-            <p>{{ post.createdAt }}</p>
-            <p>{{ post.updatedAt }}</p>
-        </div>
-    </div>
+    <app-header></app-header>
+    <app-create-post></app-create-post>
+    <app-post *ngFor="let post of reverseReadDataPosts" [post]="post"></app-post>
 </main>

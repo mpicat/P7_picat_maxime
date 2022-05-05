@@ -1,29 +1,50 @@
 require('dotenv').config();
 const Comment = require('../models/Comment');
+const User = require('../models/User');
 const LikeComment = require('../models/LikeComment');
 const fs = require('fs');
+const sequelize = require('../utils/database');
 const serverErrorMess =  "Erreur, veuillez réessayer plus tard...";
 
 // récupération de tous les comments
 exports.getAllComments = (req, res, next) => {
-    Comment.findAll()
+    Comment.findAll({
+        include: [{
+            model: User,
+            attributes: ['name'] 
+        },{
+            model: LikeComment,
+            attributes: ['likeType', 'userId']
+        }]
+    })
     .then(comments => res.status(200).json(comments))
     .catch(error => res.status(400).json({message: "Comments non trouvés !"}));
 };
 
 // récupération d'un comment
 exports.getOneComment = (req, res, next) => {
-    Comment.findOne({where : {commentId: req.params.id}})
+    Comment.findOne(
+        {include: {
+            model: User,
+            attributes: ['name'] 
+        },
+        where : {commentId: req.params.id}})
     .then(comment => res.status(200).json(comment))
     .catch(error => res.status(404).json({message: "Comment non trouvé !"}));
 };
 
 // création d'un comment
 exports.createComment = (req, res, next) => {
-    const commentObject = JSON.parse(req.body.comment);
+    const commentObject = req.file ?
+        {
+            ...JSON.parse(req.body.comment),
+            media: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        } : {...req.body};
+    
     const comment = Comment.create({
         ...commentObject,
-        media: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        likes: 0,
+        dislikes: 0
     })
     .then(() => res.status(201).json({message: "Comment créé !"}))
     .catch(error => res.status(400).json({error}));
@@ -82,8 +103,16 @@ exports.likeComment = async (req, res, next) => {
             }
             else if (noOpinionComment){
                 LikeComment.update({likeType: "like"}, {where: {commentId: req.params.id, userId: req.body.userId}})
-                    .then(() => res.status(200).json({ message: "Vous avez liké" }))
+                    .then(() => 
+                        // augmente les likes de 1 sur le model Post
+                        Comment.update(
+                            {likes: sequelize.literal('likes + 1')},
+                            {where: {commentId: req.params.id}})
+                        .then(() => res.status(200).json({ message: "Vous avez liké" }))
+                        .catch((error) => res.status(400).json({ message: "Une erreur est intervenue" }))
+                    )
                     .catch((error) => res.status(400).json({ message: "Une erreur est intervenue" }))
+                
             }
             else { 
                 LikeComment.create({
@@ -91,7 +120,14 @@ exports.likeComment = async (req, res, next) => {
                     userId: req.body.userId,
                     likeType: "like"
                 })
-                .then(() => res.status(200).json({message: "Vous avez liké"}))
+                .then(() => 
+                    // augmente les likes de 1 sur le model Comment
+                    Comment.update(
+                        {likes: sequelize.literal('likes + 1')},
+                        {where: {commentId: req.params.id}})
+                    .then(() => res.status(200).json({ message: "Vous avez liké" }))
+                    .catch((error) => res.status(400).json({ message: "Une erreur est intervenue" }))
+                )
                 .catch((error) => res.status(400).json({message: "Une erreur est intervenue lorsque vous avez voulu liker"}))
             } 
             break;
@@ -99,30 +135,51 @@ exports.likeComment = async (req, res, next) => {
         case "" :
             if (likedComment) {
                 LikeComment.update({likeType: ""}, {where: {commentId: req.params.id, userId: req.body.userId}})
-                    .then(() => res.status(200).json({ message: "Vous ne likez plus" }))
-                    .catch((error) => res.status(400).json({ message: "Une erreur est intervenue lorsque vous avez voulu retirer votre vote" }))
+                .then(() => 
+                    // diminue les likes de 1 sur le model Comment
+                    Comment.update(
+                        {likes: sequelize.literal('likes - 1')},
+                        {where: {commentId: req.params.id}})
+                    .then(() => res.status(200).json({ message: "Vous ne likez plus ce Comment" }))
+                    .catch((error) => res.status(400).json({ message: "Une erreur est intervenue" }))
+                )
+                .catch((error) => res.status(400).json({ message: "Une erreur est intervenue lorsque vous avez voulu retirer votre vote" }))
             }
             else if (dislikedComment) { 
                 LikeComment.update({likeType: ""}, {where: {commentId: req.params.id, userId: req.body.userId}})
-                    .then(() => res.status(200).json({ message: "Vous ne dislikez plus" }))
-                    .catch((error) => res.status(400).json({ message: "Une erreur est intervenue lorsque vous avez voulu retirer votre vote" }))
+                .then(() => 
+                    // diminue les dislikes de 1 sur le model Comment
+                    Comment.update(
+                        {dislikes: sequelize.literal('dislikes - 1')},
+                        {where: {commentId: req.params.id}})
+                    .then(() => res.status(200).json({ message: "Vous ne dislikez plus ce Comment" }))
+                    .catch((error) => res.status(400).json({ message: "Une erreur est intervenue" }))
+                )
+                .catch((error) => res.status(400).json({ message: "Une erreur est intervenue lorsque vous avez voulu retirer votre vote" }))
             }
             else { 
-                res.status(400).json({message: "Vous n'avez pas voté pour ce comment"});
+                res.status(400).json({message: "Vous n'avez pas voté pour ce Comment"});
             }
             break;
         
         case "dislike" :
             if (dislikedComment) {
-                res.status(400).json({message: "Vous avez déjà disliké ce comment"});
+                res.status(400).json({message: "Vous avez déjà disliké ce Comment"});
             }
             else if (likedComment) {
-                res.status(400).json({message: "Vous devez retirer votre like pour liker ce comment"});
+                res.status(400).json({message: "Vous devez retirer votre like pour liker ce Comment"});
             }
             else if (noOpinionComment){
                 LikeComment.update({likeType: "dislike"}, {where: {commentId: req.params.id, userId: req.body.userId}})
+                .then(() => 
+                    // augmente les dislikes de 1 sur le model Comment
+                    Comment.update(
+                        {dislikes: sequelize.literal('dislikes + 1')},
+                        {where: {commentId: req.params.id}})
                     .then(() => res.status(200).json({ message: "Vous avez disliké" }))
                     .catch((error) => res.status(400).json({ message: "Une erreur est intervenue" }))
+                )
+                .catch((error) => res.status(400).json({ message: "Une erreur est intervenue" }))
             }
             else { 
                 LikeComment.create({
@@ -130,9 +187,16 @@ exports.likeComment = async (req, res, next) => {
                     userId: req.body.userId,
                     likeType: "dislike"
                 })
-                .then(() => res.status(200).json({message: "Vous avez disliké"}))
+                .then(() => 
+                        // augmente les dislikes de 1 sur le model Comment
+                        Comment.update(
+                            {dislikes: sequelize.literal('dislikes + 1')},
+                            {where: {commentId: req.params.id}})
+                        .then(() => res.status(200).json({ message: "Vous avez disliké" }))
+                        .catch((error) => res.status(400).json({ message: "Une erreur est intervenue" }))
+                    )
                 .catch((error) => res.status(400).json({message: "Une erreur est intervenue lorsque vous avez voulu disliker"}))
-            }
+            } 
             break;
 
         default: console.log("Une erreur est intervenue");

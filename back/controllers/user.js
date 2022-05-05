@@ -28,7 +28,6 @@ exports.signup = (req, res, next) => {
                 email: 'maxime.picat@coursdiderot.com'
             },
             subject: 'Email de confirmation',
-            // TO DO : rajouter le lien de confirmation
             text: 'Bonjour et bienvenue sur Groupomania ! Pour activer votre email, veuillez activer le mode html de votre boîte de réception !',
             html: `<h1>Bonjour et bienvenue sur Groupomania !</h1><br><p>Veuillez confirmer votre email en cliquant sur le lien suivant : <a href="http://localhost:3000/api/auth/verify/${user.confirmationToken}">Cliquez ici</a> !</p>`,
         };
@@ -80,6 +79,7 @@ exports.login = async (req, res, next) => {
             else {
                 res.status(200).json({
                     userId: user.userId,
+                    name: user.name,
                     token: jwt.sign (
                         {userId: user.userId},
                         process.env.SECRET_TOKEN,
@@ -132,21 +132,24 @@ exports.logout = (req, res, next) => {
     User.findOne({where: {userId: req.params.id}})
     .then((user) => {
         if(!user) {
-            return res.status(404).json({error : 'Utilisateur non trouvé !'});
+            res.status(404).json({error : 'Utilisateur non trouvé !'});
         }
-        if(user.userId !== req.auth.userId) {
-            return res.status(403).json({error : 'Requête non autorisée !'});
+        else if(user.userId !== req.auth.userId) {
+            res.status(403).json({error : 'Requête non autorisée !'});
+        } else {
+            res.status(200).json({message : 'Déconnecté !'});
         }
-        res.cookie('jwt', '', { maxAge: 1 });
-        res.redirect('/');
-        console.log('Deconnecté..')
     })
     .catch(error => res.status(500).json({serverErrorMess}));
 };
 
-// récupération du user
+// récupération d'un user
 exports.getOneUser = (req, res, next) => {
     User.findOne({where : {userId: req.params.id}})
-    .then(user => res.status(200).json(user.name))
+    .then(user => res.status(200).json({
+        user: user.userId,
+        name: user.name,
+        email: user.email
+    }))
     .catch(error => res.status(404).json({message: "User non trouvé !"}));
 };

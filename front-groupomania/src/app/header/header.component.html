@@ -1,0 +1,19 @@
+<header class="header">
+    <div class="header-left">
+        <div class="header-left__logo">
+            <img src="../assets/logo-simple.png" alt="Icône de groupomania">
+        </div>
+        <div class="header-left__hello">
+            <h1>Salut {{ userFound }} !</h1>
+        </div>
+    </div>
+
+    <div class="header-right">
+        <div class="header-right__profil">
+            <button (click)="onUserPage()">Mon profil</button>
+        </div>
+        <div class="header-right__disconnect">
+            <button (click)="onLogout()">Se déconnecter</button>
+        </div>
+    </div>
+</header>
