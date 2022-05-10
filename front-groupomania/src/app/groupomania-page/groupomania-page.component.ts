@@ -26,6 +26,12 @@ export class GroupomaniaPageComponent implements OnInit {
       this.reverseReadDataPosts = this.readDataPosts.slice().reverse();
     });
   }
+
+  // recover data from child
+  addPost(newPost: Post) {
+    this.reverseReadDataPosts.push(newPost);
+    this.reverseReadDataPosts = this.reverseReadDataPosts.slice().reverse();
+  }
 }
 
 

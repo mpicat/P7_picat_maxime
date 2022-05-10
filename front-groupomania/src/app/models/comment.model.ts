@@ -1,13 +1,13 @@
 export class Comment {
-    user!: any;
-    userId!: number;
     commentId!: number;
     postId!: number;
+    userId!: number;
+    content!: string;
+    media? : string;
     createdAt!: Date;
     updatedAt!: Date;
-    media? : string;
-    content!: string;
-    likecomments!: any;
     likes!: number;
-    dislikes!: number
+    dislikes!: number;
+    userName!: any;
+    likecomments!: any
 }

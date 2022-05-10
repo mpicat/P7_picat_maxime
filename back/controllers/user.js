@@ -127,7 +127,7 @@ exports.modifyUser = (req, res, next) => {
     .catch(error => res.status(500).json({serverErrorMess}));
 };
 
-// logout d'utilisateur (TEST)
+// logout d'utilisateur
 exports.logout = (req, res, next) => {
     User.findOne({where: {userId: req.params.id}})
     .then((user) => {

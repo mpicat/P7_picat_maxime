@@ -7,6 +7,7 @@ const multer = require('../middleware/multer-config');
 // rajout route admin sur delete et put
 
 router.get('/', authMiddleware, commentCtrl.getAllComments);
+router.get('/all/:id', authMiddleware, commentCtrl.getAllCommentsPost);
 router.get('/:id', authMiddleware, commentCtrl.getOneComment);
 router.post('/', authMiddleware, multer, commentCtrl.createComment);
 router.delete('/:id', authMiddleware, commentCtrl.deleteComment);

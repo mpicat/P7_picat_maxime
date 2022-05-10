@@ -1,6 +1,6 @@
 <div class="comments">
     <div class="comments-title">
-        <p class="comments-title__user">{{ comment.user.name }}</p>
+        <button class="comments-title__user" (click)="onUser()">{{ comment.userName }}</button>
         <p class="comments-title__created">Publié le {{ comment.createdAt | date: "d MMMM yyyy à HH:mm" }}</p>
         <p class="comments-title__updated">Modifié le {{ comment.updatedAt | date: "d MMMM yyyy à HH:mm" }}</p>
         <button (click)="onViewComment()">Visualiser</button>
@@ -17,8 +17,8 @@
                 <p><i class="fa-solid fa-heart-crack"></i> {{ comment.dislikes }}</p>
             </div>
             <div class="comments-text__opinions-myself">
-                <button class="green" (click)="onLike()"><i class="fa-solid fa-heart"></i> {{ buttonTextLikeComment }}</button>
-                <button (click)="onDislike()"><i class="fa-solid fa-heart-crack"></i> {{ buttonTextDislikeComment }}</button>
+                <button class="green" (click)="onLike()"><i class="fa-solid fa-heart"></i> {{ buttonTextLike }}</button>
+                <button (click)="onDislike()"><i class="fa-solid fa-heart-crack"></i> {{ buttonTextDislike }}</button>
             </div>
         </div>
         <div class="require">

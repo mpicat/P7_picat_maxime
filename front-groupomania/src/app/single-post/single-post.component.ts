@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Post } from '../models/post.model';
+import { Comment } from '../models/comment.model';
 import { ApiserviceService } from '../services/apiservice.service';
 
 @Component({
@@ -10,19 +11,17 @@ import { ApiserviceService } from '../services/apiservice.service';
   styleUrls: ['./single-post.component.scss']
 })
 export class SinglePostComponent implements OnInit {
-
   post!: Post;
   modifyForm: any;
-  formData: any;
   url: any;
-  selectedFile: any;
-  modifyData: any;
   image: any;
   deleteForm: any;
   deleteError = false;
   changePossible = false;
 
   constructor(private router: Router, private service: ApiserviceService, private route: ActivatedRoute) { }
+  readDataComments!: Comment[];
+  reverseReadDataComments: Array<any> = [];
 
   ngOnInit(): void {
     this.modifyForm = new FormGroup({
@@ -54,9 +53,10 @@ export class SinglePostComponent implements OnInit {
   // One post
   onePost(id: any) {
     this.service.getOnePost(id).subscribe((res) => {
-      console.log(res);
       this.post = res;
+      console.log(res);
       this.okToChange();
+      this.allCommentsPost();
       return this.post;
     });
   }
@@ -85,7 +85,12 @@ export class SinglePostComponent implements OnInit {
     const content = val.contentModify;
     const postId = this.post.postId;
 
-    let modifyData = {
+    let modifyDataImg = {
+      userId: userId,
+      content: this.post.content
+    };
+
+    let modifyDataImgTxt = {
       userId: userId,
       content: content
     };
@@ -95,29 +100,35 @@ export class SinglePostComponent implements OnInit {
     // case of only text
     if(content && !this.image) {
       this.service.modifyPost(postId, userId, content, null).subscribe((res) => {
+        this.post.content = content;
         this.modifyForm.reset();
-        window.location.reload();
       });
     }
-    // case of text + image
-    else if(this.image) {
-      formData.append('post', JSON.stringify(modifyData));
+    // case of only image
+    else if(!content && this.image) {
+      formData.append('post', JSON.stringify(modifyDataImg));
       formData.append('image', this.image[0]);
       this.service.modifyPost(postId, null, null, formData).subscribe((res) => {
         this.modifyForm.reset();
         window.location.reload();
       });
     }
+    // case of text + image
     else {
-      alert('Tous les champs sont requis !')
-      };
+      formData.append('post', JSON.stringify(modifyDataImgTxt));
+      formData.append('image', this.image[0]);
+      this.service.modifyPost(postId, null, null, formData).subscribe((res) => {
+        this.modifyForm.reset();
+        window.location.reload();
+      });
+    }
   }
 
   // supprimer le post
   onDelete(postId: any) {
     const val = this.deleteForm.value;
     const nameUser = localStorage.getItem("name_user");
-    if (val.deleteName === this.post.user.name && val.deleteName === nameUser) {
+    if (val.deleteName === this.post.userName && val.deleteName === nameUser) {
       this.service.deletePost(postId).subscribe((res) => {
         console.log(`Post supprimé`);
         this.onContinue();
@@ -125,5 +136,23 @@ export class SinglePostComponent implements OnInit {
     } else {
       this.deleteError = true;
     }
+  }
+
+  // tous les comments
+  allCommentsPost() {
+    const postId = this.post.postId;
+
+    this.service.getAllCommentsPost(postId).subscribe((res) => {
+      this.readDataComments = res;
+      console.log(res);
+      // place les posts par ordre de création
+      this.reverseReadDataComments = this.readDataComments.slice().reverse();
+    });
+  }
+
+  // recover data from child
+  addComment(newComment: Comment) {
+    this.reverseReadDataComments.push(newComment);
+    this.reverseReadDataComments = this.reverseReadDataComments.slice().reverse();
   }
 }

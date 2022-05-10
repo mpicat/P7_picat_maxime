@@ -6,7 +6,8 @@ const User = sequelize.define('user', {
         type:Sequelize.INTEGER,
         autoIncrement:true,
         allowNull:false,
-        primaryKey:true
+        primaryKey:true,
+        onDelete: 'CASCADE'
     },
     name: { type: Sequelize.STRING, allowNull:false },
     email: { type: Sequelize.STRING, allowNull:false },

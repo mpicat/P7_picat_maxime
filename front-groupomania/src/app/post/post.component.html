@@ -1,6 +1,6 @@
 <div class="posts">
     <div class="posts-title">
-        <p class="posts-title__user">{{ post.user.name }} et postId: {{ post.postId}}</p>
+        <button class="posts-title__user" (click)="onUser()" >{{ post.userName }}</button>
         <p class="posts-title__created">Publiée le {{ post.createdAt | date: "d MMMM yyyy à HH:mm" }}</p>
         <p class="posts-title__updated">Modifiée le {{ post.updatedAt | date: "d MMMM yyyy à HH:mm" }}</p>
         <button (click)="onViewPost()">Visualiser</button>
@@ -25,10 +25,21 @@
             <p *ngIf="opinionError" ><i class="fa-solid fa-triangle-exclamation"></i> Vous devez d'abord retirer votre premier choix</p>
         </div>
 
-        <app-create-comment></app-create-comment>
-
-        <div *ngFor="let comment of reverseReadDataComments" >
-            <app-comment *ngIf="comment.postId === post.postId" [comment]="comment">{{ comment }}</app-comment>
+        <!-- []= "", permet de donner cette data à l'enfant (utilisable via @input après) -->
+        <app-create-comment (newCommentEvent)="addComment($event)" [post]="post"></app-create-comment>
+        
+        <button (click)="allCommentsPost()" *ngIf="this.post.comments.length > 0">{{ buttonTextComments }}</button>
+        
+        <div *ngIf="comments">
+            <div *ngFor="let comment of reverseReadDataComments" >
+                <app-comment *ngIf="comment.postId === post.postId" [comment]="comment">{{ comment }}</app-comment>
+            </div>
         </div>
+        
+
+        <!-- test -->
+        <!-- <div *ngFor="let comment of reverseReadDataComments" >
+            <app-comment *ngIf="comment.postId === post.postId" [comment]="comment">{{ comment }}</app-comment>
+        </div> -->
     </div>
 </div>

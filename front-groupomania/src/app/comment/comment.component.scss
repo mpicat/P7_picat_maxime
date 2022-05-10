@@ -18,6 +18,12 @@ $tertiary: rgba(17,35,65,255);
             &__created, &__updated {
                 font-size: 0.9rem;
             }
+            &__user {
+                background: none;
+                text-decoration: underline;
+                border: none;
+                cursor: pointer;
+            }
             button {
                 width: fit-content;
             }

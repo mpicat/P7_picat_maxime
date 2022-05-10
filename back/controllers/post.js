@@ -1,6 +1,6 @@
 require('dotenv').config();
 const Post = require('../models/Post');
-const User = require('../models/User');
+const Comment = require('../models/Comment');
 const LikePost = require('../models/LikePost');
 const fs = require('fs');
 const sequelize = require('../utils/database');
@@ -10,11 +10,12 @@ const serverErrorMess =  "Erreur, veuillez réessayer plus tard...";
 exports.getAllPosts = (req, res, next) => {
     Post.findAll({
         include: [{
-            model: User,
-            attributes: ['name'] 
-        },{
             model: LikePost,
             attributes: ['likeType', 'userId']
+        }, 
+        {
+            model: Comment,
+            attributes: ['userId'] 
         }]
     })
     .then(posts => {
@@ -25,31 +26,33 @@ exports.getAllPosts = (req, res, next) => {
 
 // récupération d'un post
 exports.getOnePost = (req, res, next) => {
-    Post.findOne(
-        {include: {
-            model: User,
-            attributes: ['name'] 
-        },
-        where : {postId: req.params.id}})
+    Post.findOne({where : {postId: req.params.id}})
     .then(post => res.status(200).json(post))
     .catch(error => res.status(404).json({message: "Post non trouvé !"}));
 };
 
 // création d'un post
-exports.createPost = (req, res, next) => {
+exports.createPost = async (req, res, next) => {
     const postObject = req.file ?
         {
             ...JSON.parse(req.body.post),
             media: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         } : {...req.body};
     
-    const post = Post.create({
-        ...postObject,
-        likes: 0,
-        dislikes: 0
-    })
-    .then(() => res.status(201).json({message: "Post créé !"}))
-    .catch(error => res.status(400).json({message: "Post non créé"}));
+    try {
+        const post = await Post.create({
+            ...postObject,
+            likes: 0,
+            dislikes: 0
+        });
+        // create a data who can be use by the front without doing more request
+        res.status(201).json({
+            message: "Post créé !",
+            data: {...post.toJSON(), likeposts: [], comments: []}
+        })
+    } catch (error) {
+        res.status(500).json({serverErrorMess})
+    }
 };
 
 // suppression d'un post
@@ -90,6 +93,23 @@ exports.modifyPost = (req, res, next) => {
         Post.update({...postObject, postId: req.params.id}, {where: {postId: req.params.id}})
         .then(() => res.status(200).json({ message: 'Post modifié !'}))
         .catch(error => res.status(400).json({ message: 'Post non modifié !'}));
+    }
+};
+
+// mise à jour tous les posts d'un user
+exports.modifyPostsUser = (req, res, next) => {
+    if (req.error) {
+        res.status(403).json({error: "Non autorisé"});
+    } 
+    else {
+        const postObject = req.file ?
+        {
+            ...JSON.parse(req.body.post),
+            media: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        } : {...req.body};
+        Post.update({...postObject, userId: req.params.id}, {where: {userId: req.params.id}})
+        .then(() => res.status(200).json({ message: 'Posts modifiés !'}))
+        .catch(error => res.status(400).json({ message: 'Posts non modifiés !'}));
     }
 };
 

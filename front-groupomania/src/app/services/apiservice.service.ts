@@ -100,9 +100,9 @@ export class ApiserviceService {
   }
 
   // création d'un post
-  createPost(userId: any, content: any, formData: any): Observable<any> {
+  createPost(userId: any, content: any, userName:any, formData: any): Observable<any> {
     if (formData == null) {
-      return this.http.post(`${this.apiUrl}/posts`, {userId, content});
+      return this.http.post(`${this.apiUrl}/posts`, {userId, content, userName});
     }
     else {
       return this.http.post(`${this.apiUrl}/posts`, formData);
@@ -115,7 +115,7 @@ export class ApiserviceService {
     return this.http.delete(`${this.apiUrl}/posts/${ids}`);
   }
 
-  // modification d'un post text
+  // modification d'un post
   modifyPost(postId: any, userId: any, content: any, formData: any): Observable<any> {
     let ids = postId;
     if (formData == null) {
@@ -124,6 +124,12 @@ export class ApiserviceService {
     else {
       return this.http.put(`${this.apiUrl}/posts/${ids}`, formData);
     }
+  }
+
+  // modification du nom user de tous ses posts
+  modifyPostsUser(userId: any, userName: any): Observable<any> {
+    let ids = userId;
+    return this.http.put(`${this.apiUrl}/posts/all/${ids}`, {userId, userName});
   }
 
   // like et dislike d'un post
@@ -139,6 +145,12 @@ export class ApiserviceService {
     return this.http.get(`${this.apiUrl}/comments`);
   }
 
+  // récupération de tous les comments d'un Post
+  getAllCommentsPost(postId: any): Observable<any> {
+    let ids = postId;
+    return this.http.get(`${this.apiUrl}/comments/all/${ids}`);
+  }
+
   // récupération d'un comment
   getOneComment(id: any): Observable<any> {
     let ids = id;
@@ -146,9 +158,9 @@ export class ApiserviceService {
   }
 
   // création d'un comment
-  createComment(userId: any, content: any, formData: any): Observable<any> {
+  createComment(postId:any, userId: any, content: any, userName: any, formData: any): Observable<any> {
     if (formData == null) {
-      return this.http.post(`${this.apiUrl}/comments`, {userId, content});
+      return this.http.post(`${this.apiUrl}/comments`, {postId, userId, content, userName});
     }
     else {
       return this.http.post(`${this.apiUrl}/comments`, formData);
@@ -162,9 +174,14 @@ export class ApiserviceService {
   }
 
   // modification d'un comment
-  modifyComment(data: any, id: any): Observable<any> {
-    let ids = id;
-    return this.http.put(`${this.apiUrl}/comments/${ids}`, data);
+  modifyComment(commentId: any, userId: any, content: any, formData: any): Observable<any> {
+    let ids = commentId;
+    if (formData == null) {
+      return this.http.put(`${this.apiUrl}/comments/${ids}`, {userId, content});
+    }
+    else {
+      return this.http.put(`${this.apiUrl}/comments/${ids}`, formData);
+    }
   }
 
   // like et dislike d'un comment

@@ -1,6 +1,5 @@
 require('dotenv').config();
 const Comment = require('../models/Comment');
-const User = require('../models/User');
 const LikeComment = require('../models/LikeComment');
 const fs = require('fs');
 const sequelize = require('../utils/database');
@@ -9,45 +8,58 @@ const serverErrorMess =  "Erreur, veuillez réessayer plus tard...";
 // récupération de tous les comments
 exports.getAllComments = (req, res, next) => {
     Comment.findAll({
-        include: [{
-            model: User,
-            attributes: ['name'] 
-        },{
+        include: {
             model: LikeComment,
             attributes: ['likeType', 'userId']
-        }]
+        }
     })
     .then(comments => res.status(200).json(comments))
     .catch(error => res.status(400).json({message: "Comments non trouvés !"}));
 };
 
+// récupération de tous les comments d'un Post
+exports.getAllCommentsPost = (req, res, next) => {
+    Comment.findAll({
+        include: {
+            model: LikeComment,
+            attributes: ['likeType', 'userId']
+        },
+        where : {postId: req.params.id}
+    })
+    .then(comments => res.status(200).json(comments))
+    .catch(error => res.status(400).json({message: "Comments de ce post non trouvés !"}));
+};
+
+
 // récupération d'un comment
 exports.getOneComment = (req, res, next) => {
-    Comment.findOne(
-        {include: {
-            model: User,
-            attributes: ['name'] 
-        },
-        where : {commentId: req.params.id}})
+    Comment.findOne({where : {commentId: req.params.id}})
     .then(comment => res.status(200).json(comment))
     .catch(error => res.status(404).json({message: "Comment non trouvé !"}));
 };
 
 // création d'un comment
-exports.createComment = (req, res, next) => {
+exports.createComment = async (req, res, next) => {
     const commentObject = req.file ?
         {
             ...JSON.parse(req.body.comment),
             media: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         } : {...req.body};
     
-    const comment = Comment.create({
-        ...commentObject,
-        likes: 0,
-        dislikes: 0
-    })
-    .then(() => res.status(201).json({message: "Comment créé !"}))
-    .catch(error => res.status(400).json({error}));
+    try {
+        const comment = await Comment.create({
+            ...commentObject,
+            likes: 0,
+            dislikes: 0
+        });
+        // create a data who can be use by the front without doing more request
+        res.status(201).json({
+            message: "Comment créé !",
+            data: {...comment.toJSON(), likecomments: []}
+        })
+    } catch (error) {
+        res.status(500).json({serverErrorMess})
+    }
 };
 
 // suppression d'un comment
@@ -58,13 +70,17 @@ exports.deleteComment = (req, res, next) => {
             res.status(404).json({error : 'Comment non trouvé !'});
         } else if(comment.userId !== req.auth.userId && !isAdmin(req)) {
             res.status(403).json({error : 'Requête non autorisée !'});
+        } else if (comment.media) {
+        const filename = comment.media.split('/images/')[1];
+        fs.unlink(`images/${filename}`, () => {
+            Comment.destroy({where: {commentId: req.params.id}})
+            .then(() => res.status(200).json({ message: 'Comment et image supprimés !'}))
+            .catch(error => res.status(400).json({ message: 'Comment et image non supprimés !'}));
+        });
         } else {
-            const filename = comment.media.split('/images/')[1];
-            fs.unlink(`images/${filename}`, () => {
-                Comment.destroy({where: {commentId: req.params.id}})
-                .then(() => res.status(200).json({ message: 'Comment supprimé !'}))
-                .catch(error => res.status(400).json({message: 'Comment non supprimé !'}));
-            });
+            Comment.destroy({where: {commentId: req.params.id}})
+            .then(() => res.status(200).json({ message: 'Comment supprimé !'}))
+            .catch(error => res.status(400).json({ message: 'Comment non supprimé !'}));
         }
     })
     .catch(error => res.status(500).json({serverErrorMess}));

@@ -1,14 +1,14 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../utils/database');
 const LikeComment = require('../models/LikeComment');
-const User = require('./User');
   
 const Comment = sequelize.define('comment', {
     commentId: {
         type:Sequelize.INTEGER,
         autoIncrement:true,
         allowNull:false,
-        primaryKey:true,
+        primaryKey:true, 
+        onDelete: 'CASCADE',
         references: {
             model: LikeComment,
             key: 'commentId'
@@ -20,21 +20,17 @@ const Comment = sequelize.define('comment', {
     },
     userId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-            model: User, 
-            key: 'userId',
-        }
+        type: Sequelize.INTEGER
     },
     content: { type: Sequelize.STRING, allowNull:false },
     media: { type: Sequelize.STRING, allowNull:true },
     createdAt: { type: Sequelize.DATE, allowNull:false },
     updatedAt: { type: Sequelize.DATE, allowNull:false },
     likes: { type: Sequelize.NUMBER, allowNull:false },
-    dislikes: { type: Sequelize.NUMBER, allowNull:false }
+    dislikes: { type: Sequelize.NUMBER, allowNull:false },
+    userName: { type: Sequelize.STRING, allowNull:false }
 })
 
-Comment.belongsTo(User, {foreignKey: 'userId'});
-Comment.hasMany(LikeComment, {foreignKey: 'commentId'});
+Comment.hasMany(LikeComment, {foreignKey: 'commentId', onDelete: 'CASCADE'});
 
 module.exports = Comment;

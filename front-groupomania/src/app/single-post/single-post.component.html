@@ -1,7 +1,7 @@
 <div class="post" *ngIf="post">
     <div class="post-header">
         <div class="post-header__title">
-            <p class="posts-header__title-user">{{ post.user.name }}</p>
+            <p class="posts-header__title-user">{{ post.userName }}</p>
             <p class="post-header__title-created">Publiée le {{ post.createdAt | date: "d MMMM yyyy à HH:mm" }}</p>
             <p class="post-header__title-updated">Modifiée le {{ post.updatedAt | date: "d MMMM yyyy à HH:mm" }}</p>
         </div>
@@ -51,5 +51,11 @@
                 </div>
             </form>
         </div>
+    </div>
+
+    <app-create-comment (newCommentEvent)="addComment($event)"></app-create-comment>
+
+    <div *ngFor="let comment of reverseReadDataComments" >
+        <app-comment *ngIf="comment.postId === post.postId" [comment]="comment">{{ comment }}</app-comment>
     </div>
 </div>

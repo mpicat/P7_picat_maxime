@@ -1,6 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ApiserviceService } from '../services/apiservice.service';
+// allow to send a data to a parent
+import { Output, EventEmitter } from '@angular/core';
+import { Comment } from '../models/comment.model';
+import { Post } from '../models/post.model';
 
 @Component({
   selector: 'app-create-comment',
@@ -8,10 +12,15 @@ import { ApiserviceService } from '../services/apiservice.service';
   styleUrls: ['./create-comment.component.scss']
 })
 export class CreateCommentComponent implements OnInit {
-
   commentForm: any;
-  image: any;
   url: any;
+  image: any;
+
+  // allow to send a data to a parent
+  @Output() newCommentEvent = new EventEmitter<Comment>();
+
+  // allow to communicate with parent : way parent to child
+  @Input() post!: Post;
 
   constructor(private service: ApiserviceService) { }
 
@@ -19,8 +28,11 @@ export class CreateCommentComponent implements OnInit {
     this.commentForm = new FormGroup({
       content: new FormControl(''),
       media: new FormControl('')
-    })
+    });
   }
+
+  get content() { return this.commentForm.get('content'); }
+  get media() { return this.commentForm.get('media'); }
 
   // allow to see the pic we want to publicate
   readUrl(event: any) {
@@ -35,41 +47,42 @@ export class CreateCommentComponent implements OnInit {
     }
   }
 
-  get content() { return this.commentForm.get('content'); }
-  get media() { return this.commentForm.get('media'); }
-
   onComment(){
     const val = this.commentForm.value;
     const idUser = localStorage.getItem("id_user");
     const userId = Number(idUser);
+    const postId = this.post.postId;
     const content = val.content;
+    const userName = localStorage.getItem("name_user");
 
     let commentData = {
+      postId: postId,
       userId: userId,
-      content: content
+      content: content,
+      userName: userName
     };
 
     let formData = new FormData();
 
     // case of only text
     if(content && !this.image) {
-      this.service.createComment(userId, content, null).subscribe((res) => {
+      this.service.createComment(postId, userId, content, userName, null).subscribe((res) => {
         this.commentForm.reset();
-        window.location.reload();
+        this.url = "";
+        this.newCommentEvent.emit(res.data);
+        this.post.comments.push({ userId: userId })
       });
     }
     // case of text + image
-    else if(this.image) {
-      formData.append('post', JSON.stringify(commentData));
+    else {
+      formData.append('comment', JSON.stringify(commentData));
       formData.append('image', this.image[0]);
-      this.service.createPost(null, null, formData).subscribe((res) => {
+      this.service.createComment(null, null, null, null, formData).subscribe((res) => {
         this.commentForm.reset();
-        window.location.reload();
+        this.url = "";
+        this.newCommentEvent.emit(res.data);
       });
     }
-    else {
-      alert('Au moins un champ est requis !')
-      };
-    }
+}
 
 }

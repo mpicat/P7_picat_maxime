@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const sequelize = require('../utils/database');
 const LikePost = require('./LikePost');
-const User = require('./User');
+const Comment = require('./Comment');
   
 const Post = sequelize.define('post', {
     postId: {
@@ -9,28 +9,30 @@ const Post = sequelize.define('post', {
         autoIncrement:true,
         allowNull:false,
         primaryKey:true,
-        references: {
+        onDelete: 'CASCADE',
+        references: [{
             model: LikePost,
             key: 'postId'
-        }
+        },
+        {
+            model: Comment,
+            key: 'postId'  
+        }],
     },
     userId: {
         allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-            model: User, 
-            key: 'userId',
-        }
+        type: Sequelize.INTEGER
     },
     content: { type: Sequelize.STRING, allowNull:false },
     media: { type: Sequelize.STRING, allowNull:true },
     createdAt: { type: Sequelize.DATE, allowNull:false },
     updatedAt: { type: Sequelize.DATE, allowNull:false },
     likes: { type: Sequelize.NUMBER, allowNull:false },
-    dislikes: { type: Sequelize.NUMBER, allowNull:false }
+    dislikes: { type: Sequelize.NUMBER, allowNull:false },
+    userName: { type: Sequelize.STRING, allowNull:false }
 });
 
-Post.belongsTo(User, {foreignKey: 'userId'});
-Post.hasMany(LikePost, {foreignKey: 'postId'});
+Post.hasMany(LikePost, {foreignKey: 'postId', onDelete: 'CASCADE'});
+Post.hasMany(Comment, {foreignKey: 'postId', onDelete: 'CASCADE'});
 
 module.exports = Post;

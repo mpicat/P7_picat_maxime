@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Post } from '../models/post.model';
 import { User } from '../models/user.model';
 import { ApiserviceService } from '../services/apiservice.service';
 
@@ -10,15 +11,17 @@ import { ApiserviceService } from '../services/apiservice.service';
   styleUrls: ['./user-page.component.scss']
 })
 export class UserPageComponent implements OnInit {
-
   user!: User;
   userFound: any;
   modifyForm: any;
   deleteForm: any;
   deleteError = false;
   mailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$";
+  changePossible = false;
 
   constructor(private service: ApiserviceService, private router: Router, private route: ActivatedRoute) { }
+  readDataPosts!: Post[];
+  reverseReadDataPosts: Array<any> = [];
 
   ngOnInit(): void {
     this.getNameUser();
@@ -31,6 +34,7 @@ export class UserPageComponent implements OnInit {
     });
     const userId = +this.route.snapshot.params['id'];
     this.oneUser(userId);
+    this.allPosts();
   }
 
   get name() { return this.modifyForm.get('name'); }
@@ -48,8 +52,20 @@ export class UserPageComponent implements OnInit {
     this.service.getOneUser(id).subscribe((res) => {
       console.log(res);
       this.user = res;
+      this.okToChange();
       return this.user;
     });
+  }
+
+  // able to modify/delete if good userId in localStorage
+  okToChange() {
+    const idUser = localStorage.getItem("id_user");
+    const userId = Number(idUser);
+    if (userId === this.user.user) {
+      this.changePossible = true;
+    } else {
+      this.changePossible = false;
+    }
   }
 
   // retour page de connexion
@@ -73,21 +89,28 @@ export class UserPageComponent implements OnInit {
     if(name && !email) {
       // garder valeur email origine
       this.service.modifyUser(userId, name, this.user.email).subscribe((res) => {
-        this.modifyForm.reset();
-        window.location.reload();
+        this.service.modifyPostsUser(userId, name).subscribe((res) => {
+          this.modifyForm.reset();
+          this.user.name = name;
+          localStorage.setItem('name_user', name);
+        });
       });
     }
     // garder valeur name origine
     else if(!name && email) {
       this.service.modifyUser(userId, this.user.name, email).subscribe((res) => {
         this.modifyForm.reset();
-        window.location.reload();
+        this.user.email = email;
       });
     }
     else {
       this.service.modifyUser(userId, name, email).subscribe((res) => {
-        this.modifyForm.reset();
-        window.location.reload();
+        this.service.modifyPostsUser(userId, name).subscribe((res) => {
+          this.modifyForm.reset();
+          this.user.name = name;
+          this.user.email = email;
+          localStorage.setItem('name_user', name);
+        });
       });
     }
   }
@@ -103,6 +126,16 @@ export class UserPageComponent implements OnInit {
     } else {
       this.deleteError = true;
     }
+  }
+
+  // tous les posts
+  allPosts() {
+    this.service.getAllPosts().subscribe((res) => {
+      this.readDataPosts = res;
+      console.log(res)
+      // place les posts par ordre de création
+      this.reverseReadDataPosts = this.readDataPosts.slice().reverse();
+    });
   }
 
 }

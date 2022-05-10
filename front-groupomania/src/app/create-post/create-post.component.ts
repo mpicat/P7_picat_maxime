@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ApiserviceService } from '../services/apiservice.service';
+// allow to send a data to a parent
+import { Output, EventEmitter } from '@angular/core';
+import { Post } from '../models/post.model';
 
 @Component({
   selector: 'app-create-post',
@@ -8,19 +11,19 @@ import { ApiserviceService } from '../services/apiservice.service';
   styleUrls: ['./create-post.component.scss']
 })
 export class CreatePostComponent implements OnInit {
-
   postForm: any;
-  formData: any;
   url: any;
-  selectedFile: any;
-  postData: any;
   image: any;
+
+  // allow to send a data to a parent
+  @Output() newPostEvent = new EventEmitter<Post>();
 
   constructor(private service: ApiserviceService) {}
 
   ngOnInit(): void {
     this.postForm = new FormGroup({
-      content: new FormControl('')
+      content: new FormControl(''),
+      media: new FormControl('')
     });
   }
 
@@ -38,38 +41,40 @@ export class CreatePostComponent implements OnInit {
   }
 
   get content() { return this.postForm.get('content'); }
+  get media() { return this.postForm.get('media'); }
 
   onPost(){
     const val = this.postForm.value;
     const idUser = localStorage.getItem("id_user");
     const userId = Number(idUser);
     const content = val.content;
+    const userName = localStorage.getItem("name_user");
 
     let postData = {
       userId: userId,
-      content: content
+      content: content,
+      userName: userName
     };
 
     let formData = new FormData();
 
     // case of only text
     if(content && !this.image) {
-      this.service.createPost(userId, content, null).subscribe((res) => {
+      this.service.createPost(userId, content, userName, null).subscribe((res) => {
         this.postForm.reset();
-        window.location.reload();
+        this.url = "";
+        this.newPostEvent.emit(res.data);
       });
     }
     // case of text + image
-    else if(this.image) {
+    else {
       formData.append('post', JSON.stringify(postData));
       formData.append('image', this.image[0]);
-      this.service.createPost(null, null, formData).subscribe((res) => {
+      this.service.createPost(null, null, null, formData).subscribe((res) => {
         this.postForm.reset();
-        window.location.reload();
+        this.url = "";
+        this.newPostEvent.emit(res.data);
       });
     }
-    else {
-      alert('Tous les champs sont requis !')
-      };
-    }
+}
 }
