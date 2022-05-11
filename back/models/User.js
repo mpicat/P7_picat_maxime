@@ -9,8 +9,16 @@ const User = sequelize.define('user', {
         primaryKey:true,
         onDelete: 'CASCADE'
     },
-    name: { type: Sequelize.STRING, allowNull:false },
-    email: { type: Sequelize.STRING, allowNull:false },
+    name: {
+        type: Sequelize.STRING,
+        allowNull:false,
+        unique: true
+    },
+    email: {
+        type: Sequelize.STRING,
+        allowNull:false,
+        unique: true
+    },
     password: { type: Sequelize.STRING, allowNull:false },
     status: { type: Sequelize.STRING, allowNull:false },
     confirmationToken: { type: Sequelize.STRING, allowNull:false },

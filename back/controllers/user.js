@@ -5,10 +5,10 @@ const User = require('../models/User');
 const sgMail = require('@sendgrid/mail');
 const API_KEY = process.env.API_KEY_NAME;
 const randomstring = require('randomstring');
-
 const serverErrorMess = 'Erreur, veuillez réessayer plus tard...';
 
-// enregistrement d'un nouvel utilisateur
+
+// REGISTER NEW USER
 exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
     .then(async hash => {
@@ -41,7 +41,8 @@ exports.signup = (req, res, next) => {
     .catch(error => res.status(500).json({serverErrorMess}))
 };
 
-// vérification création utilisateur
+
+// MAIL CHECK CREATION USER
 exports.verify = (req, res, next) => {
     User.findOne({where: {confirmationToken: req.params.confirmationToken}})
         .then(user => {
@@ -49,11 +50,11 @@ exports.verify = (req, res, next) => {
                 return res.status(404).json({error: "Utilisateur non trouvé !"})
             }
             if (user.email === process.env.SUPER_ADMIN_EMAIL) {
-                // confirmation du mail + ajout du rôle d'admin
+                // confirm mail + add admin role
                 User.update({status:"Active", admin: "YES"}, {where: {confirmationToken: req.params.confirmationToken}})
                 return res.status(200).json({ message: "Email d'Admin confirmé !"})
             }
-            // confirmation du mail
+            // confirm mail
             User.update({status: "Active"}, {where: {confirmationToken: req.params.confirmationToken}})
             .then(() => res.status(200).json({ message: "Email d'utilisateur confirmé !"}))
             .catch(error => res.status(400).json({ message: "Email d'utilisateur non confirmé !"}));
@@ -61,7 +62,8 @@ exports.verify = (req, res, next) => {
         .catch((err) => res.status(500).json({serverErrorMess}))
 };
 
-// connection d'utilisateur existant
+
+// CONNEXION USER
 exports.login = async (req, res, next) => {
     await User.findOne({where: {email: req.body.email}})
     .then(user => {
@@ -93,7 +95,8 @@ exports.login = async (req, res, next) => {
     .catch(error => res.status(500).json({serverErrorMess}))
 };
 
-// suppression d'utilisateur
+
+// DELETE USER
 exports.deleteUser = (req, res, next) => {
     User.findOne({where: {userId: req.params.id}})
     .then((user) => {
@@ -110,7 +113,8 @@ exports.deleteUser = (req, res, next) => {
     .catch(error => res.status(500).json({serverErrorMess}));
 };
 
-// modification d'utilisateur
+
+// UPDATE USER
 exports.modifyUser = (req, res, next) => {
     User.findOne({where: {userId: req.body.userId}})
     .then((user) => {
@@ -127,7 +131,8 @@ exports.modifyUser = (req, res, next) => {
     .catch(error => res.status(500).json({serverErrorMess}));
 };
 
-// logout d'utilisateur
+
+// LOGOUT USER
 exports.logout = (req, res, next) => {
     User.findOne({where: {userId: req.params.id}})
     .then((user) => {
@@ -143,7 +148,8 @@ exports.logout = (req, res, next) => {
     .catch(error => res.status(500).json({serverErrorMess}));
 };
 
-// récupération d'un user
+
+// GET ONE USER
 exports.getOneUser = (req, res, next) => {
     User.findOne({where : {userId: req.params.id}})
     .then(user => res.status(200).json({

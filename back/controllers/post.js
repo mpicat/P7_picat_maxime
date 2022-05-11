@@ -6,7 +6,8 @@ const fs = require('fs');
 const sequelize = require('../utils/database');
 const serverErrorMess =  "Erreur, veuillez réessayer plus tard...";
 
-// récupération de tous les posts
+
+// GET ALL POSTS
 exports.getAllPosts = (req, res, next) => {
     Post.findAll({
         include: [{
@@ -24,14 +25,16 @@ exports.getAllPosts = (req, res, next) => {
     .catch(error => res.status(400).json({message: "Posts non trouvés !"}));
 };
 
-// récupération d'un post
+
+// GET ONE POST
 exports.getOnePost = (req, res, next) => {
     Post.findOne({where : {postId: req.params.id}})
     .then(post => res.status(200).json(post))
     .catch(error => res.status(404).json({message: "Post non trouvé !"}));
 };
 
-// création d'un post
+
+// CREATE ONE POST
 exports.createPost = async (req, res, next) => {
     const postObject = req.file ?
         {
@@ -55,7 +58,8 @@ exports.createPost = async (req, res, next) => {
     }
 };
 
-// suppression d'un post
+
+// DELETE ONE POST
 exports.deletePost = (req, res, next) => {
     Post.findOne({where: {postId: req.params.id}})
     .then((post) => {
@@ -79,7 +83,8 @@ exports.deletePost = (req, res, next) => {
     .catch(error => res.status(500).json({serverErrorMess}));
 };
 
-// mise à jour post
+
+// UPDATE ONE POST
 exports.modifyPost = (req, res, next) => {
     if (req.error) {
         res.status(403).json({error: "Non autorisé"});
@@ -96,7 +101,8 @@ exports.modifyPost = (req, res, next) => {
     }
 };
 
-// mise à jour tous les posts d'un user
+
+// UPDATE ALL POSTS FORM ONE USER
 exports.modifyPostsUser = (req, res, next) => {
     if (req.error) {
         res.status(403).json({error: "Non autorisé"});
@@ -113,7 +119,8 @@ exports.modifyPostsUser = (req, res, next) => {
     }
 };
 
-// like et dislike post
+
+// OPINION ABOUT A POST
 exports.likePost = async (req, res, next) => {
     let choice = req.body.like
     const likedPost = await LikePost.findOne({where: {postId: req.params.id, userId: req.body.userId, likeType: "like"}});
@@ -139,7 +146,6 @@ exports.likePost = async (req, res, next) => {
                         .catch((error) => res.status(400).json({ message: "Une erreur est intervenue" }))
                     )
                     .catch((error) => res.status(400).json({ message: "Une erreur est intervenue" }))
-                
             }
             else { 
                 LikePost.create({

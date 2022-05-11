@@ -5,7 +5,8 @@ const fs = require('fs');
 const sequelize = require('../utils/database');
 const serverErrorMess =  "Erreur, veuillez réessayer plus tard...";
 
-// récupération de tous les comments
+
+// GET ALL COMMENTS
 exports.getAllComments = (req, res, next) => {
     Comment.findAll({
         include: {
@@ -17,7 +18,8 @@ exports.getAllComments = (req, res, next) => {
     .catch(error => res.status(400).json({message: "Comments non trouvés !"}));
 };
 
-// récupération de tous les comments d'un Post
+
+// GET ALL COMMENTS FROM ONE POST
 exports.getAllCommentsPost = (req, res, next) => {
     Comment.findAll({
         include: {
@@ -31,14 +33,15 @@ exports.getAllCommentsPost = (req, res, next) => {
 };
 
 
-// récupération d'un comment
+// GET ONE COMMENT
 exports.getOneComment = (req, res, next) => {
     Comment.findOne({where : {commentId: req.params.id}})
     .then(comment => res.status(200).json(comment))
     .catch(error => res.status(404).json({message: "Comment non trouvé !"}));
 };
 
-// création d'un comment
+
+// CREATE ONE COMMENT
 exports.createComment = async (req, res, next) => {
     const commentObject = req.file ?
         {
@@ -62,7 +65,8 @@ exports.createComment = async (req, res, next) => {
     }
 };
 
-// suppression d'un comment
+
+// DELETE ONE COMMENT
 exports.deleteComment = (req, res, next) => {
     Comment.findOne({where: {commentId: req.params.id}})
     .then((comment) => {
@@ -86,7 +90,8 @@ exports.deleteComment = (req, res, next) => {
     .catch(error => res.status(500).json({serverErrorMess}));
 };
 
-// mise à jour d'un comment
+
+// UPDATE ONE COMMENT
 exports.modifyComment = (req, res, next) => {
     if (req.error) {
         res.status(403).json({error: "Non autorisé"});
@@ -102,7 +107,8 @@ exports.modifyComment = (req, res, next) => {
     }
 };
 
-// like et dislike comment
+
+// OPINION ABOUT A COMMENT
 exports.likeComment = async (req, res, next) => {
     let choice = req.body.like
     const likedComment = await LikeComment.findOne({where: {commentId: req.params.id, userId: req.body.userId, likeType: "like"}});
@@ -128,7 +134,6 @@ exports.likeComment = async (req, res, next) => {
                         .catch((error) => res.status(400).json({ message: "Une erreur est intervenue" }))
                     )
                     .catch((error) => res.status(400).json({ message: "Une erreur est intervenue" }))
-                
             }
             else { 
                 LikeComment.create({

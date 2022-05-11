@@ -4,7 +4,6 @@ const router = express.Router();
 const commentCtrl = require('../controllers/comment');
 const {authMiddleware} = require('../middleware/auth');
 const multer = require('../middleware/multer-config');
-// rajout route admin sur delete et put
 
 router.get('/', authMiddleware, commentCtrl.getAllComments);
 router.get('/all/:id', authMiddleware, commentCtrl.getAllCommentsPost);

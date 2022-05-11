@@ -4,7 +4,6 @@ const router = express.Router();
 const userCtrl = require('../controllers/user');
 const checkPassword = require('../middleware/check-password');
 const {authMiddleware} = require('../middleware/auth');
-// rajout route admin sur delete et put
 
 router.post('/signup', checkPassword, userCtrl.signup);
 router.get('/verify/:confirmationToken', userCtrl.verify);
