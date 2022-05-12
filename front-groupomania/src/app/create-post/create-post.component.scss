@@ -2,29 +2,32 @@ $primary : rgba(253,45,1,255);
 $secondary: rgba(255,215,215,255);
 $tertiary: rgba(17,35,65,255);
 
-// form
 .formPost {
     display: flex;
     justify-content: center;
     width: 100%;
-    margin-bottom: 50px;
+    margin-top: 90px;
+    margin-bottom: 30px;
     form {
         display: flex;
         flex-direction: column;
-        row-gap: 15px;
-        width: 65%;
+        row-gap: 10px;
+        width: 85%;
         margin: auto;
-        div {
-            display: flex;
-            flex-direction: column;
-        }
         textarea {
-            padding: 5px;
-            border-radius: 10px;
+            width: 100%;
+            padding: 7px;
+            border-radius: 7px;
+            border: white 1px solid;
+            background-color: $tertiary;
+            color: white;
             font-size: 1.1rem;
         }
         input {
             color: white;
+            :focus {
+                outline: none;
+            }
         }
         .form-btn {
             display: flex;

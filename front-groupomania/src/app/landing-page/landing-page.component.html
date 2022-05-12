@@ -2,32 +2,43 @@
     <div class="accueil-img">
         <img src="../assets/icon-left-font-monochrome-white.png" alt="Icône de groupomania">
     </div>
+
     <div class="accueil-login">
-        <div class="accueil-login__icon"><i class="fa-solid fa-user"></i></div>
+        <div class="accueil-login__icon">
+            <i class="fa-solid fa-user"></i>
+        </div>
+
         <form [formGroup]="userForm">
-            <div>
-                <label for="email">Email :</label>
-                <input type="email" formControlName="email" id="email" required>
+            <div class="form-input">
+                <div class="form-input__title">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" formControlName="email" placeholder="Email" required>
+                </div>
                 <div class="require">
                     <p *ngIf="email.errors?.['required']" ><i class="fa-solid fa-triangle-exclamation"></i> Ce champ est requis</p>
                 </div>
             </div>
-            <div>
-                <label for="password">Mot de passe :</label>
-                <input type="password" formControlName="password" id="password" required>
+
+            <div class="form-input">
+                <div class="form-input__title">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" formControlName="password" placeholder="Mot de passe" required>
+                </div>
                 <div class="require">
                     <p *ngIf="password.errors?.['required']" ><i class="fa-solid fa-triangle-exclamation"></i> Ce champ est requis</p>
                 </div>
             </div>
+            
             <div class="form-btn">
                 <button (click)="onLogin()" [disabled]="email.errors?.['required'] || password.errors?.['required']">Se connecter</button>
             </div>
+
             <div class="require">
                 <p *ngIf="loginError" ><i class="fa-solid fa-triangle-exclamation"></i> Problème avec vos identifiants, veuillez réessayer</p>
             </div>
         </form>
-        <div class="accueil-login__btn">
-            <button (click)="onSignup()">Pas encore de compte ?</button>
-        </div>
+    </div>
+    <div class="form-signup">
+        <a href="signup">Pas encore de compte ?</a>
     </div>
 </main>

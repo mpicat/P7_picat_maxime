@@ -10,7 +10,7 @@ $secondary: rgba(255,215,215,255);
 $tertiary: rgba(17,35,65,255);
 
 html, body {
-    background-color: $tertiary;
+    background: linear-gradient(27deg, white 10%, $primary 100%);
     height: 100%;
 }
 

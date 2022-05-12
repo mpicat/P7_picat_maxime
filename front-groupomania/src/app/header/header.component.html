@@ -1,19 +1,27 @@
-<header class="header">
-    <div class="header-left">
-        <div class="header-left__logo">
+<main>
+    <div class="top">
+        <div class="top-logo">
             <img src="../assets/logo-simple.png" alt="Icône de groupomania">
         </div>
-        <div class="header-left__hello">
-            <h1>Salut {{ userFound }} !</h1>
+        <div class="top-hello">
+            <h1>Bonjour {{ userFound }} !</h1>
         </div>
     </div>
 
-    <div class="header-right">
-        <div class="header-right__profil">
-            <button (click)="onUserPage()">Mon profil</button>
+    <div class="bottom">
+        <div>
+            <button (click)="onContinue()"><i class="fa-solid fa-house"></i></button>
         </div>
-        <div class="header-right__disconnect">
-            <button (click)="onLogout()">Se déconnecter</button>
+        <div>
+            <button (click)="onUserPage()"><i class="fa-solid fa-user"></i></button>
+        </div>
+        <div>
+            <button (click)="onLogout()"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
         </div>
     </div>
-</header>
+</main>
+
+
+
+
+

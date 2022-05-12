@@ -8,8 +8,7 @@ import { ApiserviceService } from '../services/apiservice.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  
-  userFound: any;
+  userFound!: string | null;
 
   constructor(private service: ApiserviceService, private router: Router) { }
 
@@ -21,6 +20,17 @@ export class HeaderComponent implements OnInit {
   getNameUser() {
     const nameUser = localStorage.getItem("name_user");
     this.userFound = nameUser;
+  }
+
+  // retour page de posts
+  onContinue(): void {
+    this.router.navigateByUrl('groupomania');
+  }
+
+  // page de profil
+  onUserPage(): void {
+    const idUser = localStorage.getItem("id_user");
+    this.router.navigateByUrl(`groupomania/user/${idUser}`);
   }
 
   // logout user
@@ -35,11 +45,5 @@ export class HeaderComponent implements OnInit {
   // retour page d'accueil
   onLanding(): void {
     this.router.navigateByUrl('');
-  }
-
-  // page de profil
-  onUserPage(): void {
-    const idUser = localStorage.getItem("id_user");
-    this.router.navigateByUrl(`groupomania/user/${idUser}`);
   }
 }

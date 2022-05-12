@@ -2,44 +2,63 @@ $primary : rgba(253,45,1,255);
 $secondary: rgba(255,215,215,255);
 $tertiary: rgba(17,35,65,255);
 
-.header {
+.top {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     padding: 15px;
-    margin-bottom: 25px;
-    &-left {
-        display: flex;
-        align-items: center;
-        column-gap: 15px;
-        &__logo {
-            width: 45px;
-            img {
-                width: 100%;
-            }
-        }
-        h1 {
-            color: white;
-            font-size: 1.5rem;
+    background-color: $tertiary;
+    column-gap: 20px;
+    &-logo {
+        width: 45px;
+        img {
+            width: 100%;
         }
     }
-    &-right {
-        display: flex;
-        align-items: center;
-        column-gap: 15px;
-        &__disconnect, &__profil {
-            display: flex;
-            justify-content: center;
-            button {
-                padding: 15px;
-                border-radius: 50px;
-                border: solid 1px white;
-                color: white;
-                background-color: $tertiary;
-                cursor: pointer;
-                width: 100%;
-                font-size: 1rem;
-            }
+    &-hello {
+        h1 {
+            color: white;
+            font-size: 22px;
         }
+    }
+}
+
+.bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $tertiary;;
+    column-gap: 40px;
+    button {
+        padding: 10px;
+        color: white;
+        background-color: $tertiary;
+        cursor: pointer;
+        font-size: 22px;
+        border: none;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    main {
+        display: flex;
+        column-gap: 200px;
+        justify-content: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: $tertiary;
+    }
+    .top, .bottom {
+        position: relative;
+        justify-content: center;
     }
 }

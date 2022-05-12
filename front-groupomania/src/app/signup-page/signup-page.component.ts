@@ -9,12 +9,11 @@ import { ApiserviceService } from '../services/apiservice.service';
   styleUrls: ['./signup-page.component.scss']
 })
 export class SignupPageComponent implements OnInit {
-
-  constructor(private service: ApiserviceService, private router: Router) { }
-
   userForm: any;
   mailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$";
   passwordPattern = "^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$";
+
+  constructor(private service: ApiserviceService, private router: Router) { }
 
   ngOnInit(): void {
     this.userForm = new FormGroup({

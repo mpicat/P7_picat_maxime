@@ -1,7 +1,7 @@
 <div class="formPost">
     <form [formGroup]= "postForm">
         <div>
-            <textarea formControlName="content" id="content" cols="15" rows="3" placeholder="Un nouveau post ?" required ></textarea>
+            <textarea formControlName="content" id="content" cols="15" rows="2" placeholder="Quoi de neuf ?" required ></textarea>
         </div>
         <div>
             <input type="file" formControlName="media" id="media" (change)="readUrl($event)" >
@@ -9,6 +9,7 @@
         <div>
             <img [src]="url" >
         </div>
+
         <div class="form-btn" (click)="onPost()">
             <button [disabled]="content.errors?.['required']">Poster</button>
         </div>

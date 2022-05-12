@@ -2,36 +2,48 @@
     <div class="main-img">
         <img src="../assets/logo-simple.png" alt="Icône de Groupomania">
     </div>
+
     <h1>Inscription</h1>
+
     <form [formGroup]= "userForm">
-        <div>
-            <label for="name">Nom :</label>
-            <input type="text" formControlName="name" id="name" required>
+        <div class="form-input">
+            <div class="form-input__title">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" formControlName="name" placeholder="Nom" required>
+            </div>
             <div class="require">
                 <p *ngIf="name.errors?.['required']" ><i class="fa-solid fa-triangle-exclamation"></i> Ce champ est requis</p>
             </div>
         </div>
-        <div>
-            <label for="email">Email :</label>
-            <input type="email" formControlName='email' id="email" required>
+
+        <div class="form-input">
+            <div class="form-input__title">
+                <i class="fa-solid fa-envelope"></i>
+                <input type="email" formControlName="email" placeholder="Email" required>
+            </div>
             <div class="require">
                 <p *ngIf="email.errors?.['required']" ><i class="fa-solid fa-triangle-exclamation"></i> Ce champ est requis</p>
                 <p *ngIf="email.errors?.['pattern']" ><i class="fa-solid fa-triangle-exclamation"></i> Ce champ est non valide</p>
             </div>
         </div>
-        <div>
-            <label for="password">Mot de passe :</label>
-            <input type="password" formControlName='password' id="password" required>
+
+        <div class="form-input">
+            <div class="form-input__title">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" formControlName="password" placeholder="Mot de passe" required>
+            </div>
             <div class="require">
                 <p *ngIf="password.errors?.['required']" ><i class="fa-solid fa-triangle-exclamation"></i> Ce champ est requis</p>
                 <p *ngIf="password.errors?.['pattern']" ><i class="fa-solid fa-triangle-exclamation"></i> Ce champ doit contenir au moins 10 caractères, dont au minimum une lettre minuscule, une lettre majuscule et un chiffre</p>
             </div>
         </div>
-        <div (click)="userSignup()" class="form-btn">
+
+        <div class="form-btn" (click)="userSignup()">
             <button [disabled]="name.errors?.['required'] || email.errors?.['required'] || email.errors?.['pattern'] || password.errors?.['required'] || password.errors?.['pattern']">S'enregistrer</button>
         </div>
+
+        <div class="btn-back">
+            <button (click)="onLanding()">Retour à la page de connexion</button>
+        </div>
     </form>
-    <div class="btn-back">
-        <button (click)="onLanding()">Retour à la page de connexion</button>
-    </div>
 </main>
