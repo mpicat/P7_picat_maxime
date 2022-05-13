@@ -123,15 +123,20 @@ exports.modifyPost = (req, res, next) => {
 
 // UPDATE ALL POSTS FROM ONE USER
 exports.modifyPostsUser = (req, res, next) => {
-    if (req.error) {
-        res.status(403).json({error: "Non autorisé"});
-    } 
-    else {
-        const postObject = req.file ?
+    const postObject = req.file ?
         {
             ...JSON.parse(req.body.post),
             media: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         } : {...req.body};
+    if (req.isAdmin && req.isAdmin === process.env.ADMIN_TOKEN) {
+        Post.update({...postObject, userId: Post.userId}, {where: {userId: req.params.id}})
+        .then(() => res.status(200).json({ message: "Posts modifiés par l'admin!"}))
+        .catch(error => res.status(400).json({ message: "Posts non modifiés par l'admin!"}));
+    }
+    else if (req.error) {
+        res.status(403).json({error: "Non autorisé"});
+    } 
+    else {
         Post.update({...postObject, userId: req.params.id}, {where: {userId: req.params.id}})
         .then(() => res.status(200).json({ message: 'Posts modifiés !'}))
         .catch(error => res.status(400).json({ message: 'Posts non modifiés !'}));

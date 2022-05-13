@@ -104,12 +104,18 @@ exports.deleteUser = (req, res, next) => {
         if(!user) {
             return res.status(404).json({error : 'Utilisateur non trouvé !'});
         }
-        if(user.userId !== req.auth.userId) {
-            return res.status(403).json({error : 'Requête non autorisée !'});
+        else if (req.isAdmin && req.isAdmin === process.env.ADMIN_TOKEN) {
+            User.destroy({where: {userId: req.params.id}})
+            .then(() => res.status(200).json({ message: "Utilisateur supprimé par l'admin !"}))
+            .catch(error => res.status(400).json({message: "Utilisateur non supprimé l'admin!"}));
         }
-        User.destroy({where: {userId: req.params.id}})
-        .then(() => res.status(200).json({ message: 'Utilisateur supprimé !'}))
-        .catch(error => res.status(400).json({message: 'Utilisateur non supprimé !'}));
+        else if(user.userId !== req.auth.userId) {
+            return res.status(403).json({error : 'Requête non autorisée !'});
+        } else {
+            User.destroy({where: {userId: req.params.id}})
+            .then(() => res.status(200).json({ message: 'Utilisateur supprimé !'}))
+            .catch(error => res.status(400).json({message: 'Utilisateur non supprimé !'}));
+        }
     })
     .catch(error => res.status(500).json({serverErrorMess}));
 };
@@ -117,17 +123,19 @@ exports.deleteUser = (req, res, next) => {
 
 // UPDATE USER
 exports.modifyUser = (req, res, next) => {
-    User.findOne({where: {userId: req.body.userId}})
+    User.findOne({where: {userId: req.params.id}})
     .then((user) => {
         if(!user) {
             return res.status(404).json({error : 'Utilisateur non trouvé !'});
         }
-        if(user.userId !== req.auth.userId) {
+        else if(user.userId !== req.auth.userId) {
             return res.status(403).json({error : 'Requête non autorisée !'});
         }
-        User.update({name: req.body.name, email: req.body.email}, {where: {userId: req.body.userId}})
-        .then(() => res.status(200).json({ message: 'Utilisateur mis à jour !'}))
-        .catch(error => res.status(400).json({message: 'Utilisateur non mis à jour !'}));
+        else {
+            User.update({name: req.body.name, email: req.body.email}, {where: {userId: req.params.id}})
+            .then(() => res.status(200).json({ message: 'Utilisateur mis à jour !'}))
+            .catch(error => res.status(400).json({message: 'Utilisateur non mis à jour !'}));
+        }
     })
     .catch(error => res.status(500).json({serverErrorMess}));
 };

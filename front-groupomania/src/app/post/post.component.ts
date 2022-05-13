@@ -78,15 +78,15 @@ export class PostComponent implements OnInit {
     const objNoOpinion = { likeType: "", userId: userId };
     const objLike = { likeType: "like", userId: userId };
 
-    if (this.isPresentUser(userId) === 'liked') {
+    if (this.buttonTextLike === "Changer") {
       const res = await this.service.likePost(postId, userId, "").subscribe();
       // modifie le nbre de like
       this.post.likes -= 1;
       this.buttonTextLike = "J'aime";
       // récupère l'obj avec le bon userId dans l'array des likes
-      const likepostNow = this.post.likeposts.find((obj: { likeType: string, userId: number }) => obj.userId === userId);
+      const likepostNowLiked = this.post.likeposts.find((obj: { likeType: string, userId: number }) => obj.userId === userId);
       // suppression de cet objet
-      let myIndex = this.post.likeposts.indexOf(likepostNow);
+      let myIndex = this.post.likeposts.indexOf(likepostNowLiked);
       if (myIndex !== -1) {
         this.post.likeposts.splice(myIndex, 1);
         // puis remplacement par l'objet contenant le bon opinion
@@ -102,8 +102,7 @@ export class PostComponent implements OnInit {
       if (myIndex !== -1) {
         this.post.likeposts.splice(myIndex, 1);
         this.post.likeposts.push(objLike);
-      } else { 
-      // we make sure that we look for something that has actually been pushed in the likeposts array
+      } else {
         this.post.likeposts.push(objLike);
       }
     }

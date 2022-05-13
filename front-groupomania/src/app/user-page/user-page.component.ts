@@ -18,7 +18,8 @@ export class UserPageComponent implements OnInit {
   deleteError = false;
   modifyError = false;
   mailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$";
-  changePossible = false;
+  changePossibleName = false;
+  changePossibleDelete = false;
 
   constructor(private service: ApiserviceService, private router: Router, private route: ActivatedRoute) { }
   readDataPosts!: Post[];
@@ -53,20 +54,33 @@ export class UserPageComponent implements OnInit {
     this.service.getOneUser(id).subscribe((res) => {
       console.log(res);
       this.user = res;
-      this.okToChange();
+      this.okToChangeName();
+      this.okToChangeDelete();
       return this.user;
     });
   }
 
-  // able to modify/delete if good userId in localStorage
-  okToChange() {
+  // able to modify if good userId in localStorage
+  okToChangeName() {
+    const isAdmin = localStorage.getItem("admin_user");
+    const idUser = localStorage.getItem("id_user");
+    const userId = Number(idUser);
+    if (userId === this.user.user) {
+      this.changePossibleName = true;
+    } else {
+      this.changePossibleName = false;
+    }
+  }
+
+  // able to delete if good userId in localStorage
+  okToChangeDelete() {
     const isAdmin = localStorage.getItem("admin_user");
     const idUser = localStorage.getItem("id_user");
     const userId = Number(idUser);
     if (userId === this.user.user || isAdmin === 'YES') {
-      this.changePossible = true;
+      this.changePossibleDelete = true;
     } else {
-      this.changePossible = false;
+      this.changePossibleDelete = false;
     }
   }
 
@@ -82,9 +96,8 @@ export class UserPageComponent implements OnInit {
 
   // modifier le user
   onModify() {
+    const userId = +this.route.snapshot.params['id'];
     const val = this.modifyForm.value;
-    const idUser = localStorage.getItem("id_user");
-    const userId = Number(idUser);
     const name = val.name;
     const email = val.email;
 
@@ -122,13 +135,18 @@ export class UserPageComponent implements OnInit {
 
   // supprimer le user
   onDelete(userId: any) {
+    const isAdmin = localStorage.getItem("admin_user");
     const val = this.deleteForm.value;
-    if (val.deleteName === this.user.name) {
+    if (val.deleteName === this.user.name || isAdmin === 'YES') {
       this.service.modifyLikePostsUser(userId).subscribe((res) => {
         this.service.modifyLikeCommentsUser(userId).subscribe((res) => {
           this.service.deleteUser(userId).subscribe((res) => {
             console.log(`Utilisateur supprimé`);
-            this.onLanding();
+            if (isAdmin === 'YES') {
+              this.onContinue();
+            } else {
+              this.onLanding();
+            }
           })
         })
       });

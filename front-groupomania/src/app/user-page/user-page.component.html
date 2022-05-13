@@ -7,8 +7,8 @@
         <p>Email : {{ user.email }}</p>
     </div>
     
-    <div *ngIf="changePossible === true">
-        <div class="user-modify">
+    <div>
+        <div class="user-modify" *ngIf="changePossibleName === true">
             <form [formGroup]= "modifyForm">
                 <div>
                     <input type="text" formControlName="name" placeholder="Modifier votre nom ?" required >
@@ -25,7 +25,7 @@
             </form>
         </div>
 
-        <div class="user-delete">
+        <div class="user-delete" *ngIf="changePossibleDelete === true">
             <form [formGroup]= "deleteForm">
                 <div>
                     <input type="text" formControlName="deleteName" id="deleteName" placeholder="Nom d'utilisateur" required >

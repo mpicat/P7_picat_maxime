@@ -72,7 +72,7 @@ export class CommentComponent implements OnInit {
     const objNoOpinion = { likeType: "", userId: userId };
     const objLike = { likeType: "like", userId: userId };
 
-    if (this.isPresentUser(userId) === 'liked') {
+    if (this.buttonTextLike === "Changer") {
       const res = await this.service.likeComment(commentId, userId, "").subscribe();
       // modifie le nbre de like
       this.comment.likes -= 1;

@@ -63,8 +63,9 @@ export class ApiserviceService {
   }
 
   // modify User
-  modifyUser(userId: any, name: any, email: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/auth/modify`, {userId, name, email});
+  modifyUser(userId: any, name: string, email: string): Observable<any> {
+    let ids = userId;
+    return this.http.put(`${this.apiUrl}/auth/modify/${ids}`, {name, email});
   }
 
   // logout User
@@ -132,7 +133,7 @@ export class ApiserviceService {
   // modification du nom user de tous ses posts
   modifyPostsUser(userId: any, userName: any): Observable<any> {
     let ids = userId;
-    return this.http.put(`${this.apiUrl}/posts/all/${ids}`, {userId, userName});
+    return this.http.put(`${this.apiUrl}/posts/all/${ids}`, {userName});
   }
 
   // like d'un post
