@@ -34,8 +34,7 @@ export class SignupPageComponent implements OnInit {
     if(this.userForm.valid) {
       this.service.signup(this.userForm.value).subscribe((res) => {
         this.userForm.reset();
-        alert('Vous vous êtes correctement inscrit !');
-        this.onLanding();
+        this.onGoodSignup();
         this.createError = false;
       }, (err) => this.createError = true);
     }
@@ -43,6 +42,11 @@ export class SignupPageComponent implements OnInit {
       alert('Tous les champs sont requis !')
     };
   };
+
+  // page correctement inscrit
+  onGoodSignup(): void {
+    this.router.navigateByUrl('good-signup');
+  }
 
   // retour à l'accueil
   onLanding(): void {

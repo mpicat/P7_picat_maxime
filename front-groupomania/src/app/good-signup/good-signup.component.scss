@@ -1,0 +1,43 @@
+$primary : rgba(253,45,1,255);
+$secondary: rgba(255,215,215,255);
+$tertiary: rgba(17,35,65,255);
+
+.welcome-goodSignup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+    margin-top: 20vh;
+    color: white;
+    row-gap: 20px;
+    padding: 0 25px;
+    h1 {
+        font-size: 2rem;
+        text-align: center;
+    }
+    p {
+        font-size: 1.1rem;
+        text-align: center;
+    }
+    img {
+        width: 30%;
+    }
+    a {
+        margin-top: 25px;
+        color: white;
+        background-color: $primary;
+        padding: 20px;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .welcome-goodSignup img {
+        width: 20%;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .welcome-goodSignup img {
+        width: 10%;
+    }
+}

@@ -20,7 +20,8 @@ import { UserPageComponent } from './user-page/user-page.component';
 import { CommentComponent } from './comment/comment.component';
 import { SingleCommentComponent } from './single-comment/single-comment.component';
 import { CreateCommentComponent } from './create-comment/create-comment.component';
-import { VerifyMailComponent } from './verify-mail/verify-mail.component'
+import { VerifyMailComponent } from './verify-mail/verify-mail.component';
+import { GoodSignupComponent } from './good-signup/good-signup.component'
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { VerifyMailComponent } from './verify-mail/verify-mail.component'
     CommentComponent,
     SingleCommentComponent,
     CreateCommentComponent,
-    VerifyMailComponent
+    VerifyMailComponent,
+    GoodSignupComponent
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ApiserviceService } from '../services/apiservice.service';
 
 @Component({
   selector: 'app-verify-mail',
@@ -7,9 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class VerifyMailComponent implements OnInit {
 
-  constructor() { }
+  constructor(private service: ApiserviceService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    const confirmToken = this.route.snapshot.params['confirmationToken'];
+    this.verifyUser(confirmToken);
   }
 
+  // verify mail
+  verifyUser(confirmToken: string) {
+    this.service.verify(confirmToken).subscribe((res) => {
+      console.log("Mail confirmé");
+    });
+  }
 }

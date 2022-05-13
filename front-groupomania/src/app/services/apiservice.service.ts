@@ -30,9 +30,9 @@ export class ApiserviceService {
   }
 
   // verify mail User
-  verify(confirmToken: any): Observable<any> {
-    let confirmationToken = confirmToken;
-    return this.http.get(`${this.apiUrl}/auth/verify/${confirmationToken}`)
+  verify(confirmationToken: any): Observable<any> {
+    let confirmToken = confirmationToken;
+    return this.http.get(`${this.apiUrl}/auth/verify/${confirmToken}`)
   }
 
   // login User
