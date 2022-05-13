@@ -20,13 +20,15 @@ export class SignupPageComponent implements OnInit {
     this.userForm = new FormGroup({
       name: new FormControl(''),
       email: new FormControl('', Validators.pattern(this.mailPattern)),
-      password: new FormControl('', Validators.pattern(this.passwordPattern))
+      password: new FormControl('', Validators.pattern(this.passwordPattern)),
+      passwordVerif: new FormControl('', Validators.pattern(this.passwordPattern))
     });
   };
 
   get name() { return this.userForm.get('name'); }
   get email() { return this.userForm.get('email'); }
   get password() { return this.userForm.get('password'); }
+  get passwordVerif() { return this.userForm.get('passwordVerif'); }
   
 
   // create new user

@@ -34,12 +34,21 @@
             </div>
             <div class="require">
                 <p *ngIf="password.errors?.['required']" ><i class="fa-solid fa-triangle-exclamation"></i> Ce champ est requis</p>
-                <p *ngIf="password.errors?.['pattern']" ><i class="fa-solid fa-triangle-exclamation"></i> Ce champ doit contenir au moins 10 caractères, dont au minimum une lettre minuscule, une lettre majuscule et un chiffre</p>
+            </div>
+
+            <div class="form-input__title">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" formControlName="passwordVerif" placeholder="Vérifiez votre mot de passe" required>
+            </div>
+            <div class="require">
+                <p *ngIf="passwordVerif.errors?.['required']" ><i class="fa-solid fa-triangle-exclamation"></i> Ce champ est requis</p>
+                <p *ngIf="passwordVerif.value !== password.value" ><i class="fa-solid fa-triangle-exclamation"></i> Ce mot de passe doit être le même que le précédent</p>
+                <p *ngIf="password.errors?.['pattern']" ><i class="fa-solid fa-triangle-exclamation"></i> Le mot de passe doit contenir au moins 10 caractères, dont au minimum une lettre minuscule, une lettre majuscule et un chiffre</p>
             </div>
         </div>
 
         <div class="form-btn" (click)="userSignup()">
-            <button [disabled]="name.errors?.['required'] || email.errors?.['required'] || email.errors?.['pattern'] || password.errors?.['required'] || password.errors?.['pattern']">S'enregistrer</button>
+            <button [disabled]="name.errors?.['required'] || email.errors?.['required'] || email.errors?.['pattern'] || password.errors?.['required'] || password.errors?.['pattern'] || passwordVerif.errors?.['required'] || passwordVerif.value !== password.value">S'enregistrer</button>
         </div>
         <div class="require">
             <p *ngIf="createError" ><i class="fa-solid fa-triangle-exclamation"></i> Ce nom ou cet email est déjà utilisé</p>
