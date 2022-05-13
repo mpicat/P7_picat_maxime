@@ -13,8 +13,8 @@ import { Post } from '../models/post.model';
 })
 export class CreateCommentComponent implements OnInit {
   commentForm: any;
-  url: any;
-  image: any;
+  url!: String | ArrayBuffer | null;
+  image!: string;
 
   // allow to send a data to a parent
   @Output() newCommentEvent = new EventEmitter<Comment>();
@@ -64,7 +64,7 @@ export class CreateCommentComponent implements OnInit {
 
     let formData = new FormData();
 
-    // case of only text
+    // comment only text
     if(content && !this.image) {
       this.service.createComment(postId, userId, content, userName, null).subscribe((res) => {
         this.commentForm.reset();
@@ -73,7 +73,7 @@ export class CreateCommentComponent implements OnInit {
         this.post.comments.push({ userId: userId })
       });
     }
-    // case of text + image
+    // comment text + image
     else {
       formData.append('comment', JSON.stringify(commentData));
       formData.append('image', this.image[0]);
@@ -83,6 +83,5 @@ export class CreateCommentComponent implements OnInit {
         this.newCommentEvent.emit(res.data);
       });
     }
-}
-
+  }
 }

@@ -1,55 +1,39 @@
-<main class="main" *ngIf="user">
-    <div class="main-title">
-        <div class="main-title__left">
-            <div class="main-title__left-logo">
-                <img src="../assets/logo-simple.png" alt="Icône de groupomania">
-            </div>
-            <div class="main-title__left-mine">
-                <h1>Mon Profil</h1>
-            </div>
-        </div>
+<app-header></app-header>
 
-        <div class="main-title__right">
-            <button (click)="onContinue()">Retour à l'accueil</button>
-        </div>
-    </div>
-
-    <div class="main-profil" >
-        <div class="main-profil__name">
-            <p>Nom : {{ user.name }}</p>
-        </div>
-        <div class="main-profil__name">
-            <p>Email : {{ user.email }}</p>
-        </div>
+<div class="user" *ngIf="user">
+    <div class="user-profil" >
+        <h1>Profil</h1>
+        <p>Nom : {{ user.name }}</p>
+        <p>Email : {{ user.email }}</p>
     </div>
     
     <div *ngIf="changePossible === true">
-        <div class="main-modifications">
+        <div class="user-modify">
             <form [formGroup]= "modifyForm">
                 <div>
-                    <label for="name">Nom :</label>
-                    <input type="text" formControlName="name" id="name" placeholder="Modifier votre nom ?" required >
+                    <input type="text" formControlName="name" placeholder="Modifier votre nom ?" required >
                 </div>
                 <div>
-                    <label for="email">Email :</label>
-                    <input type="email" formControlName="email" id="email" placeholder="Modifier votre email ?" required >
+                    <input type="email" formControlName="email" placeholder="Modifier votre email ?" required >
                 </div>
                 <div class="form-btn">
                     <button (click)="onModify()" [disabled]="name.errors?.['required'] && email.errors?.['required'] || email.errors?.['pattern']">Modifier</button>
                 </div>
+                <div class="requireModify">
+                    <p *ngIf="modifyError" ><i class="fa-solid fa-triangle-exclamation"></i> Ce nom ou cet email est déjà utilisé</p>
+                </div>
             </form>
         </div>
 
-        <div class="main-delete">
+        <div class="user-delete">
             <form [formGroup]= "deleteForm">
                 <div>
-                    <label for="deleteName">Nom :</label>
-                    <input type="text" formControlName="deleteName" id="deleteName" placeholder="Supprimer votre compte ?" required >
+                    <input type="text" formControlName="deleteName" id="deleteName" placeholder="Nom d'utilisateur" required >
                 </div>
                 <div class="require">
                     <p *ngIf="deleteName.errors?.['required']" ><i class="fa-solid fa-triangle-exclamation"></i> Ce champ est requis pour la suppression</p>
                 </div>
-                <div class="form-btn-black">
+                <div class="form-btn">
                     <button (click)="onDelete(user.user)" [disabled]="deleteName.errors?.['required']" >Supprimer votre profil</button>
                 </div>
                 <div class="require">
@@ -59,9 +43,7 @@
         </div>
     </div>
 
-    
-    <div *ngFor="let post of reverseReadDataPosts" >
+    <div *ngFor="let post of reverseReadDataPosts" class="allposts-user">
         <app-post *ngIf="post.userId === user.user" [post]="post">{{ post }}</app-post>
     </div>
-    
-</main>
+</div>

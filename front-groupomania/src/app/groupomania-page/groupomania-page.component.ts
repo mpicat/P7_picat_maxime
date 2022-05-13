@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Post } from '../models/post.model';
 import { ApiserviceService } from '../services/apiservice.service';
 
@@ -7,13 +7,14 @@ import { ApiserviceService } from '../services/apiservice.service';
   templateUrl: './groupomania-page.component.html',
   styleUrls: ['./groupomania-page.component.scss']
 })
-export class GroupomaniaPageComponent implements OnInit {
-
-  constructor(private service: ApiserviceService) {}
+export class GroupomaniaPageComponent implements AfterViewInit {
   readDataPosts!: Post[];
   reverseReadDataPosts: Array<any> = [];
 
-  ngOnInit(): void {
+  constructor(private service: ApiserviceService) {}
+ 
+  // modif à chaque affichage de la page
+  ngAfterViewInit(): void {
     this.allPosts();
   }
 

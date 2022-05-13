@@ -1,5 +1,9 @@
 <main>
     <app-header></app-header>
-    <app-create-post (newPostEvent)="addPost($event)"></app-create-post>
-    <app-post *ngFor="let post of reverseReadDataPosts" [post]="post"></app-post>
+    <div class="create-main">
+        <app-create-post (newPostEvent)="addPost($event)"></app-create-post>
+    </div>
+    <div class="allpost-main">
+        <app-post *ngFor="let post of reverseReadDataPosts" [post]="post"></app-post>
+    </div>
 </main>

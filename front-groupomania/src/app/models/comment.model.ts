@@ -8,6 +8,6 @@ export class Comment {
     updatedAt!: Date;
     likes!: number;
     dislikes!: number;
-    userName!: any;
+    userName!: string;
     likecomments!: any
 }

@@ -6,14 +6,13 @@ $tertiary: rgba(17,35,65,255);
     display: flex;
     justify-content: center;
     width: 100%;
-    margin-top: 90px;
-    margin-bottom: 30px;
+    margin: 30px auto;
     form {
         display: flex;
         flex-direction: column;
+        justify-content: center;
         row-gap: 10px;
         width: 85%;
-        margin: auto;
         textarea {
             width: 100%;
             padding: 7px;
@@ -22,32 +21,57 @@ $tertiary: rgba(17,35,65,255);
             background-color: $tertiary;
             color: white;
             font-size: 1.1rem;
+            &:focus {
+                outline: none;
+            }
         }
         input {
             color: white;
-            :focus {
+            &:focus {
                 outline: none;
+            }
+        }
+        .img-post {
+            width: 100%;
+            img {
+                width: 100%;
             }
         }
         .form-btn {
             display: flex;
             justify-content: center;
             width: 100%;
-            margin: auto;
             button {
                 padding: 15px;
-                border-radius: 50px;
                 border: none;
-                background-color: green;
+                background-color: $primary;
                 color: white;
                 cursor: pointer;
                 width: 100%;
                 font-size: 1.1rem;
                 &:disabled {
                     cursor: default;
-                    background-color: $primary;
+                    background-color: rgba(253,45,1,0.5);
                 }
             }
+        }
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .formPost {
+        width: 40%;
+        form {
+            width: 100%;
+        }
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .formPost {
+        width: 35%;
+        form {
+            width: 100%;
         }
     }
 }

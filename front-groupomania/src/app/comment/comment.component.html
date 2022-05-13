@@ -1,28 +1,24 @@
 <div class="comments">
     <div class="comments-title">
-        <button class="comments-title__user" (click)="onUser()">{{ comment.userName }}</button>
-        <p class="comments-title__created">Publié le {{ comment.createdAt | date: "d MMMM yyyy à HH:mm" }}</p>
-        <p class="comments-title__updated">Modifié le {{ comment.updatedAt | date: "d MMMM yyyy à HH:mm" }}</p>
-        <button (click)="onViewComment()">Visualiser</button>
+        <div class="comments-title__left">
+            <button (click)="onUser()" >{{ comment.userName }}</button>
+            <p>Le {{ comment.createdAt | date: "d MMMM yyyy à HH:mm" }}</p>
+        </div>
+        <div class="comments-title__right" *ngIf="changePossible === true">
+            <button (click)="onViewComment()"><i class="fa-solid fa-eye"></i></button>
+        </div>
     </div>
+
+    <p class="comments-content">{{ comment.content }}</p>
 
     <img class="comments-media" *ngIf="comment.media" [src]="comment.media" alt="image de comment">
 
-    <div class="comments-text">
-        <p class="comments-text__content">{{ comment.content }}</p>
-
-        <div class="comments-text__opinions">
-            <div class="comments-text__opinions-others">
-                <p><i class="fa-solid fa-heart"></i> {{ comment.likes }}</p>
-                <p><i class="fa-solid fa-heart-crack"></i> {{ comment.dislikes }}</p>
-            </div>
-            <div class="comments-text__opinions-myself">
-                <button class="green" (click)="onLike()"><i class="fa-solid fa-heart"></i> {{ buttonTextLike }}</button>
-                <button (click)="onDislike()"><i class="fa-solid fa-heart-crack"></i> {{ buttonTextDislike }}</button>
-            </div>
+    <div class="comments-opinions">
+        <div class="comments-opinions__others">
+            <p><i class="fa-solid fa-heart"></i> {{ comment.likes }}</p>
         </div>
-        <div class="require">
-            <p *ngIf="opinionError" ><i class="fa-solid fa-triangle-exclamation"></i> Vous devez d'abord retirer votre premier choix</p>
+        <div class="comments-opinions__myself">
+            <button class="green" (click)="onLike()">{{ buttonTextLike }}</button>
         </div>
     </div>
 </div>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Post } from '../models/post.model';
 import { ApiserviceService } from '../services/apiservice.service';
 
 @Component({
@@ -9,17 +10,20 @@ import { ApiserviceService } from '../services/apiservice.service';
 })
 export class HeaderComponent implements OnInit {
   userFound!: string | null;
+  adminFound!: string | null;
 
   constructor(private service: ApiserviceService, private router: Router) { }
 
   ngOnInit(): void {
-    this.getNameUser();
+    this.getDataUser();
   }
 
-  // récupération du nom du user de la session
-  getNameUser() {
+  // récupération du nom et admin du user de la session
+  getDataUser() {
     const nameUser = localStorage.getItem("name_user");
+    const adminUser = localStorage.getItem("admin_user");
     this.userFound = nameUser;
+    this.adminFound = adminUser;
   }
 
   // retour page de posts

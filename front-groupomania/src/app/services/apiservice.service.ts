@@ -43,6 +43,7 @@ export class ApiserviceService {
         localStorage.setItem('id_token', res.token);
         localStorage.setItem('id_user', res.userId);
         localStorage.setItem('name_user', res.name);
+        localStorage.setItem('admin_user', res.admin);
       })
     );
   }
@@ -56,6 +57,7 @@ export class ApiserviceService {
         localStorage.removeItem('id_token');
         localStorage.removeItem('id_user');
         localStorage.removeItem('name_user');
+        localStorage.removeItem('admin_user');
       })
     );
   }
@@ -75,6 +77,7 @@ export class ApiserviceService {
         localStorage.removeItem('id_token');
         localStorage.removeItem('id_user');
         localStorage.removeItem('name_user');
+        localStorage.removeItem('admin_user');
       })
     );
   }
@@ -132,10 +135,16 @@ export class ApiserviceService {
     return this.http.put(`${this.apiUrl}/posts/all/${ids}`, {userId, userName});
   }
 
-  // like et dislike d'un post
+  // like d'un post
   likePost(postId: any, userId: any, like: any): Observable<any> {
     let ids = postId;
     return this.http.post(`${this.apiUrl}/posts/${ids}/like`, {userId, like});
+  }
+
+  // modification du userId de tous les posts d'un user
+  modifyLikePostsUser(userId: any): Observable<any> {
+    let ids = userId;
+    return this.http.put(`${this.apiUrl}/posts/likeposts/${ids}`, {userId: 0});
   }
 
   // ROUTES COMMENT
@@ -189,5 +198,12 @@ export class ApiserviceService {
     let ids = commentId;
     return this.http.post(`${this.apiUrl}/comments/${ids}/like`, {userId, like});
   }
+
+  // modification du userId de tous les comments d'un user
+  modifyLikeCommentsUser(userId: any): Observable<any> {
+    let ids = userId;
+    return this.http.put(`${this.apiUrl}/comments/likecomments/${ids}`, {userId: 0});
+  }
+
 
 }

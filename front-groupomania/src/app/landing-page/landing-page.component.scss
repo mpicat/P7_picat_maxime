@@ -82,6 +82,9 @@ main {
 .form-signup {
     padding: 45px 0 15px;
     text-align: center;
+    a {
+        color: white;
+    }
 }
 
 .form-btn {
@@ -93,12 +96,14 @@ main {
         border: none;
         background-color: $primary;
         color: white;
+        font-weight: 500;
         cursor: pointer;
         width: 100%;
         font-size: 1.1rem;
         &:disabled {
             cursor: default;
-            background-color: rgba(253,45,1,0.5);
+            background-color: rgba(253,45,1,0.7);
+            font-weight: 300;
         }
     }
 }

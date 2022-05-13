@@ -2,130 +2,146 @@ $primary : rgba(253,45,1,255);
 $secondary: rgba(255,215,215,255);
 $tertiary: rgba(17,35,65,255);
 
-// comment
-.comment{
-    display: flex;
-    flex-direction: column;
-    row-gap: 15px;
-    background-color: white;
-    border-radius: 10px;
-    width: 65%;
-    margin: auto;
-        &-header {
-            padding: 10px 25px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 1.1rem;
-            &__title-created, &__title-updated {
-                font-size: 0.9rem;
-            }
-            &__btn {
-                button {
-                    width: 200px;
-                    font-size: 0.9rem;
-                }
-            }
-        }
-        &-media {
-            width: 100%;
-        }
-        &-text {
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            row-gap: 15px;
-        }
-}
-
-.comment-changes__formModify {
+.comment-modify {
     display: flex;
     justify-content: center;
-    width: 100%;
-    padding: 10px;
+    width: 90%;
+    padding: 30px 10px 10px;
+    margin: 70px auto 0;
     form {
         display: flex;
         flex-direction: column;
+        justify-content: center;
         row-gap: 10px;
-        width: 100%;
-        margin: auto;
-        div {
-            display: flex;
-            flex-direction: column;
+        width: 85%;
+        .content-before {
+            padding-bottom: 10px;
+            p {
+                color: white;
+                padding-bottom: 5px;
+                span {
+                    text-decoration: underline;
+                }
+            }
+            textarea {
+                width: 100%;
+                padding: 7px;
+                border-radius: 7px;
+                border: white 1px solid;
+                background-color: $tertiary;
+                color: white;
+                font-size: 1.1rem;
+                &:focus {
+                    outline: none;
+                }
+            }
         }
-        label {
-            font-size: 1rem;
+        .img-before {
+            p {
+                color: white;
+                padding-bottom: 5px;
+                text-decoration: underline; 
+            }
+            img {
+                width: 100%;
+            }
+            input {
+                color: white;
+                width: 100%;
+                &:focus {
+                    outline: none;
+                }
+            }
         }
-        textarea {
-            padding: 5px;
-            font-size: 1rem;
-            background-color: $tertiary;
-            color: white;
-            border: none;
+        
+        
+        .img-comment {
+            width: 100%;
+            img {
+                width: 100%;
+            }
         }
         .form-btn {
             display: flex;
             justify-content: center;
-            margin: auto;
+            width: 100%;
             button {
-                padding: 10px;
-                border-radius: 15px;
+                padding: 15px;
                 border: none;
-                background-color: green;
+                background-color: $primary;
                 color: white;
                 cursor: pointer;
                 width: 100%;
                 font-size: 1.1rem;
                 &:disabled {
                     cursor: default;
-                    background-color: $primary;
+                    background-color: rgba(253,45,1,0.5);
                 }
             }
         }
     }
 }
 
-.comment-changes__formDelete form {
+.comment-delete {
     display: flex;
-    flex-direction: column;
-    row-gap: 15px;
-    width: 400px;
-    margin: auto;
-    label {
-        color: $tertiary;
-        padding-left: 20px;
-        font-size: 1.1rem;
-    }
-    input {
-        margin-top: 5px;
-        padding: 15px;
-        border-radius: 50px;
-        width: 100%;
-        font-size: 1.1rem;
-    }
-    .form-btn-black {
+    justify-content: center;
+    width: 90%;
+    padding: 30px 10px 10px;
+    margin: 20px auto 0;
+    form {
         display: flex;
+        flex-direction: column;
         justify-content: center;
-        width: 100%;
-        margin-top: 15px;
-        button {
-            padding: 15px;
-            border-radius: 50px;
-            border: none;
-            background-color: green;
-            color: white;
-            cursor: pointer;
+        row-gap: 10px;
+        width: 85%;
+        input {
             width: 100%;
+            padding: 7px;
+            border-radius: 7px;
+            border: white 1px solid;
+            background-color: $tertiary;
+            color: white;
             font-size: 1.1rem;
-            &:disabled {
-                cursor: default;
-                background-color: black
+            &:focus {
+                outline: none;
+            }
+        }
+        .form-btn {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            button {
+                padding: 15px;
+                border: none;
+                background-color: $primary;
+                color: white;
+                cursor: pointer;
+                width: 100%;
+                font-size: 1.1rem;
+                &:disabled {
+                    cursor: default;
+                    background-color: rgba(253,45,1,0.5);
+                }
             }
         }
     }
 }
 
+
 .require {
-    color: $primary;
+    color: white;
     padding: 5px 0 0 15px;
     height: 50px;
+}
+
+@media screen and (min-width: 768px) {
+    .comment-modify, .comment-delete {
+        width: 50%;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .comment-modify, .comment-delete {
+        width: 35%;
+    }
 }

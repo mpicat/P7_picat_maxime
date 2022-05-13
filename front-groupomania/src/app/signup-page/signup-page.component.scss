@@ -7,7 +7,7 @@ main {
     flex-direction: column;
     align-items: center;
     row-gap: 20px;
-    padding-top: 60px;
+    padding-top: 50px;
     .main-img {
         width: 25%;
         img {
@@ -35,7 +35,7 @@ form {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                background-color: $tertiary;
+                background: linear-gradient(207deg, white, $primary 80%);
                 padding: 20px;
                 font-size: 18px;
                 width: 70px;
@@ -76,7 +76,7 @@ form {
         button {
             padding: 15px;
             border: none;
-            background-color: $tertiary;
+            background: linear-gradient(207deg, white, $primary 80%);
             color: white;
             cursor: pointer;
             width: 100%;
@@ -86,9 +86,9 @@ form {
 }
 
 .require {
-    color: $tertiary;
+    color: white;
     padding: 5px;
-    height: 25px;
+    height: 30px;
 }
 
 @media screen and (min-width: 768px) {

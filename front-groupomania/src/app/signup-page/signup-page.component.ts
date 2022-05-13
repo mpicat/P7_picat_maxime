@@ -12,6 +12,7 @@ export class SignupPageComponent implements OnInit {
   userForm: any;
   mailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$";
   passwordPattern = "^(?=.{10,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$";
+  createError = false;
 
   constructor(private service: ApiserviceService, private router: Router) { }
 
@@ -35,7 +36,8 @@ export class SignupPageComponent implements OnInit {
         this.userForm.reset();
         alert('Vous vous êtes correctement inscrit !');
         this.onLanding();
-      });
+        this.createError = false;
+      }, (err) => this.createError = true);
     }
     else {
       alert('Tous les champs sont requis !')

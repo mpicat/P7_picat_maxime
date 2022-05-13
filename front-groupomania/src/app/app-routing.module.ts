@@ -6,6 +6,7 @@ import { SignupPageComponent } from './signup-page/signup-page.component';
 import { SingleCommentComponent } from './single-comment/single-comment.component';
 import { SinglePostComponent } from './single-post/single-post.component';
 import { UserPageComponent } from './user-page/user-page.component';
+import { VerifyMailComponent } from './verify-mail/verify-mail.component';
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent},
@@ -13,7 +14,8 @@ const routes: Routes = [
   { path: 'signup', component: SignupPageComponent},
   { path: 'groupomania/post/:id', component: SinglePostComponent},
   { path: 'groupomania/user/:id', component: UserPageComponent},
-  { path: 'groupomania/comment/:id', component: SingleCommentComponent}
+  { path: 'groupomania/comment/:id', component: SingleCommentComponent},
+  { path: 'api/auth/verify/:id', component: VerifyMailComponent}
 ];
 
 @NgModule({

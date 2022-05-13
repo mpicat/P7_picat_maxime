@@ -5,7 +5,7 @@ const { verifyUserToken, getTokenFromReqHeaders } = require('./auth');
 const adminMiddleware = (req, res, next) => {
     try {
         const userId = verifyUserToken(getTokenFromReqHeaders(req));
-        User.findOne({where: {admin: "Yes"}})
+        User.findOne({where: {admin: "YES"}})
         .then(user => {
             if (user.userId === userId) {
                 console.log("Admin identifié !")

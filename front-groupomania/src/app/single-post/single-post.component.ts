@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Post } from '../models/post.model';
-import { Comment } from '../models/comment.model';
 import { ApiserviceService } from '../services/apiservice.service';
 
 @Component({
@@ -13,19 +12,17 @@ import { ApiserviceService } from '../services/apiservice.service';
 export class SinglePostComponent implements OnInit {
   post!: Post;
   modifyForm: any;
-  url: any;
-  image: any;
+  url!: String | ArrayBuffer | null;
+  image!: string;
   deleteForm: any;
   deleteError = false;
-  changePossible = false;
 
   constructor(private router: Router, private service: ApiserviceService, private route: ActivatedRoute) { }
-  readDataComments!: Comment[];
-  reverseReadDataComments: Array<any> = [];
 
   ngOnInit(): void {
     this.modifyForm = new FormGroup({
-      contentModify: new FormControl('')
+      contentModify: new FormControl(''),
+      mediaModify: new FormControl('')
     });
     this.deleteForm = new FormGroup({
       deleteName: new FormControl('')
@@ -48,6 +45,7 @@ export class SinglePostComponent implements OnInit {
   }
 
   get contentModify() { return this.modifyForm.get('contentModify'); }
+  get mediaModify() { return this.modifyForm.get('mediaModify'); }
   get deleteName() { return this.deleteForm.get('deleteName'); }
 
   // One post
@@ -55,21 +53,8 @@ export class SinglePostComponent implements OnInit {
     this.service.getOnePost(id).subscribe((res) => {
       this.post = res;
       console.log(res);
-      this.okToChange();
-      this.allCommentsPost();
       return this.post;
     });
-  }
-
-  // able to modify/delete if good userId in localStorage
-  okToChange() {
-    const idUser = localStorage.getItem("id_user");
-    const userId = Number(idUser);
-    if (userId === this.post.userId) {
-      this.changePossible = true;
-    } else {
-      this.changePossible = false;
-    }
   }
 
   // retour à l'accueil
@@ -96,7 +81,7 @@ export class SinglePostComponent implements OnInit {
     };
 
     let formData = new FormData();
-
+    
     // case of only text
     if(content && !this.image) {
       this.service.modifyPost(postId, userId, content, null).subscribe((res) => {
@@ -110,7 +95,7 @@ export class SinglePostComponent implements OnInit {
       formData.append('image', this.image[0]);
       this.service.modifyPost(postId, null, null, formData).subscribe((res) => {
         this.modifyForm.reset();
-        window.location.reload();
+        this.router.navigateByUrl('groupomania');
       });
     }
     // case of text + image
@@ -119,7 +104,7 @@ export class SinglePostComponent implements OnInit {
       formData.append('image', this.image[0]);
       this.service.modifyPost(postId, null, null, formData).subscribe((res) => {
         this.modifyForm.reset();
-        window.location.reload();
+        this.router.navigateByUrl('groupomania');
       });
     }
   }
@@ -128,31 +113,10 @@ export class SinglePostComponent implements OnInit {
   onDelete(postId: any) {
     const val = this.deleteForm.value;
     const nameUser = localStorage.getItem("name_user");
-    if (val.deleteName === this.post.userName && val.deleteName === nameUser) {
-      this.service.deletePost(postId).subscribe((res) => {
-        console.log(`Post supprimé`);
-        this.onContinue();
-      })
-    } else {
-      this.deleteError = true;
-    }
-  }
 
-  // tous les comments
-  allCommentsPost() {
-    const postId = this.post.postId;
-
-    this.service.getAllCommentsPost(postId).subscribe((res) => {
-      this.readDataComments = res;
-      console.log(res);
-      // place les posts par ordre de création
-      this.reverseReadDataComments = this.readDataComments.slice().reverse();
-    });
-  }
-
-  // recover data from child
-  addComment(newComment: Comment) {
-    this.reverseReadDataComments.push(newComment);
-    this.reverseReadDataComments = this.reverseReadDataComments.slice().reverse();
+    this.service.deletePost(postId).subscribe((res) => {
+      console.log(`Post supprimé`);
+      this.onContinue();
+    })
   }
 }

@@ -10,10 +10,11 @@ import { Post } from '../models/post.model';
   templateUrl: './create-post.component.html',
   styleUrls: ['./create-post.component.scss']
 })
+
 export class CreatePostComponent implements OnInit {
   postForm: any;
-  url: any;
-  image: any;
+  url!: String | ArrayBuffer | null;
+  image!: string;
 
   // allow to send a data to a parent
   @Output() newPostEvent = new EventEmitter<Post>();
@@ -58,7 +59,7 @@ export class CreatePostComponent implements OnInit {
 
     let formData = new FormData();
 
-    // case of only text
+    // post only text
     if(content && !this.image) {
       this.service.createPost(userId, content, userName, null).subscribe((res) => {
         this.postForm.reset();
@@ -66,7 +67,7 @@ export class CreatePostComponent implements OnInit {
         this.newPostEvent.emit(res.data);
       });
     }
-    // case of text + image
+    // post text + image
     else {
       formData.append('post', JSON.stringify(postData));
       formData.append('image', this.image[0]);
@@ -76,5 +77,5 @@ export class CreatePostComponent implements OnInit {
         this.newPostEvent.emit(res.data);
       });
     }
-}
+  }
 }

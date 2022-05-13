@@ -1,45 +1,34 @@
 <div class="posts">
     <div class="posts-title">
-        <button class="posts-title__user" (click)="onUser()" >{{ post.userName }}</button>
-        <p class="posts-title__created">Publiée le {{ post.createdAt | date: "d MMMM yyyy à HH:mm" }}</p>
-        <p class="posts-title__updated">Modifiée le {{ post.updatedAt | date: "d MMMM yyyy à HH:mm" }}</p>
-        <button (click)="onViewPost()">Visualiser</button>
+        <div class="posts-title__left">
+            <button (click)="onUser()" >{{ post.userName }}</button>
+            <p>Le {{ post.createdAt | date: "d MMMM yyyy à HH:mm" }}</p>
+        </div>
+        <div class="posts-title__right" *ngIf="changePossible === true">
+            <button (click)="onViewPost()"><i class="fa-solid fa-eye"></i></button>
+        </div>
     </div>
+
+    <p class="posts-content">{{ post.content }}</p>
 
     <img class="posts-media" *ngIf="post.media" [src]="post.media" alt="image de post">
 
-    <div class="posts-text">
-        <p class="posts-text__content">{{ post.content }}</p>
-
-        <div class="posts-text__opinions">
-            <div class="posts-text__opinions-others">
-                <p><i class="fa-solid fa-heart"></i> {{ post.likes }}</p>
-                <p><i class="fa-solid fa-heart-crack"></i> {{ post.dislikes }}</p>
-            </div>
-            <div class="posts-text__opinions-myself">
-                <button class="green" (click)="onLike()"><i class="fa-solid fa-heart"></i> {{ buttonTextLike }}</button>
-                <button (click)="onDislike()"><i class="fa-solid fa-heart-crack"></i> {{ buttonTextDislike }}</button>
-            </div>
+    <div class="posts-opinions">
+        <div class="posts-opinions__others">
+            <p><i class="fa-solid fa-heart"></i> {{ post.likes }}</p>
+            <button (click)="allCommentsPost()" *ngIf="this.post.comments.length > 0">{{ buttonTextComments }}</button>
         </div>
-        <div class="require">
-            <p *ngIf="opinionError" ><i class="fa-solid fa-triangle-exclamation"></i> Vous devez d'abord retirer votre premier choix</p>
+        <div class="posts-opinions__myself">
+            <button class="green" (click)="onLike()">{{ buttonTextLike }}</button>
         </div>
+    </div>
 
-        <!-- []= "", permet de donner cette data à l'enfant (utilisable via @input après) -->
-        <app-create-comment (newCommentEvent)="addComment($event)" [post]="post"></app-create-comment>
-        
-        <button (click)="allCommentsPost()" *ngIf="this.post.comments.length > 0">{{ buttonTextComments }}</button>
-        
-        <div *ngIf="comments">
-            <div *ngFor="let comment of reverseReadDataComments" >
-                <app-comment *ngIf="comment.postId === post.postId" [comment]="comment">{{ comment }}</app-comment>
-            </div>
-        </div>
-        
+    <!-- []= "", permet de donner cette data à l'enfant (utilisable via @input après) -->
+    <app-create-comment (newCommentEvent)="addComment($event)" [post]="post"></app-create-comment>
 
-        <!-- test -->
-        <!-- <div *ngFor="let comment of reverseReadDataComments" >
+    <div *ngIf="comments">
+        <div *ngFor="let comment of reverseReadDataComments" >
             <app-comment *ngIf="comment.postId === post.postId" [comment]="comment">{{ comment }}</app-comment>
-        </div> -->
+        </div>
     </div>
 </div>

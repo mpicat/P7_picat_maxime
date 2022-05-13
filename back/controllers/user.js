@@ -29,7 +29,7 @@ exports.signup = (req, res, next) => {
             },
             subject: 'Email de confirmation',
             text: 'Bonjour et bienvenue sur Groupomania ! Pour activer votre email, veuillez activer le mode html de votre boîte de réception !',
-            html: `<h1>Bonjour et bienvenue sur Groupomania !</h1><br><p>Veuillez confirmer votre email en cliquant sur le lien suivant : <a href="http://localhost:3000/api/auth/verify/${user.confirmationToken}">Cliquez ici</a> !</p>`,
+            html: `<h1>Bonjour et bienvenue sur Groupomania !</h1><br><p>Veuillez confirmer votre email en cliquant sur le lien suivant : <a href="http://localhost:4200/api/auth/verify/${user.confirmationToken}">Cliquez ici</a> !</p>`,
         };
         sgMail.send(message)
         .then(res => console.log('Mail envoyé'))
@@ -82,6 +82,7 @@ exports.login = async (req, res, next) => {
                 res.status(200).json({
                     userId: user.userId,
                     name: user.name,
+                    admin: user.admin,
                     token: jwt.sign (
                         {userId: user.userId},
                         process.env.SECRET_TOKEN,
@@ -155,7 +156,8 @@ exports.getOneUser = (req, res, next) => {
     .then(user => res.status(200).json({
         user: user.userId,
         name: user.name,
-        email: user.email
+        email: user.email,
+        admin: user.admin
     }))
     .catch(error => res.status(404).json({message: "User non trouvé !"}));
 };

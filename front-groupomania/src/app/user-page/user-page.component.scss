@@ -2,115 +2,137 @@ $primary : rgba(253,45,1,255);
 $secondary: rgba(255,215,215,255);
 $tertiary: rgba(17,35,65,255);
 
-.main {
-    margin: auto;
-    padding: 25px;
-    width: 50%;
-    &-title {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        &__left {
-            h1 {
-                color: white;
-                font-size: 2.2rem;
-                font-weight: 600;
-            }
-            &-logo {
-                width: 100px;
-                img {
-                    width: 100%;
-                }
-            }
-            display: flex;
-            flex-direction: column;
-            row-gap: 25px;
-        }
-        &__right {
-            button {
-                padding: 15px;
-                border-radius: 50px;
-                border: solid 1px white;
-                color: white;
-                background-color: $tertiary;
-                cursor: pointer;
-                width: 100%;
-                font-size: 1rem;
-            }
-        }
-    }
+.user {
+    margin-top: 100px;
     &-profil {
         color: white;
-        font-size: 1.2rem;
-        padding: 15px 0;
-    }
-    &-modifications {
-        padding: 60px 0 80px;
+        width: 90%;
+        margin: 0 auto 15px;
+        text-align: center;
+        h1 {
+            font-size: 1.5rem;
+            padding-bottom: 10px;
+        }
+        p {
+            font-size: 1.2rem;
+        }
     }
 }
 
-form {
+.user-modify {
     display: flex;
-    flex-direction: column;
-    row-gap: 25px;
-    width: 400px;
+    justify-content: center;
+    width: 90%;
+    padding: 30px 10px 10px;
     margin: auto;
-    label {
-        color: white;
-        padding-left: 20px;
-        font-size: 1.1rem;
-    }
-    input {
-        margin-top: 5px;
-        padding: 15px;
-        border-radius: 50px;
-        width: 100%;
-        font-size: 1.1rem;
-    }
-    .form-btn {
+    form {
         display: flex;
+        flex-direction: column;
         justify-content: center;
-        width: 100%;
-        margin-top: 15px;
-        button {
-            padding: 15px;
-            border-radius: 50px;
-            border: none;
-            background-color: green;
-            color: white;
-            cursor: pointer;
+        row-gap: 10px;
+        width: 85%;
+        input {
             width: 100%;
+            padding: 7px;
+            border-radius: 7px;
+            border: white 1px solid;
+            background-color: $tertiary;
+            color: white;
             font-size: 1.1rem;
-            &:disabled {
-                cursor: default;
+            &:focus {
+                outline: none;
+            }
+        }
+        .form-btn {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            button {
+                padding: 15px;
+                border: none;
                 background-color: $primary;
+                color: white;
+                cursor: pointer;
+                width: 100%;
+                font-size: 1.1rem;
+                &:disabled {
+                    cursor: default;
+                    background-color: rgba(253,45,1,0.5);
+                }
             }
         }
     }
-    .form-btn-black {
+}
+
+.user-delete {
+    display: flex;
+    justify-content: center;
+    width: 90%;
+    padding: 30px 10px 10px;
+    margin: 20px auto 0;
+    form {
         display: flex;
+        flex-direction: column;
         justify-content: center;
-        width: 100%;
-        margin-top: 15px;
-        button {
-            padding: 15px;
-            border-radius: 50px;
-            border: none;
-            background-color: green;
-            color: white;
-            cursor: pointer;
+        row-gap: 10px;
+        width: 85%;
+        input {
             width: 100%;
+            padding: 7px;
+            border-radius: 7px;
+            border: white 1px solid;
+            background-color: $tertiary;
+            color: white;
             font-size: 1.1rem;
-            &:disabled {
-                cursor: default;
-                background-color: black
+            &:focus {
+                outline: none;
+            }
+        }
+        .form-btn {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            button {
+                padding: 15px;
+                border: none;
+                background-color: $primary;
+                color: white;
+                cursor: pointer;
+                width: 100%;
+                font-size: 1.1rem;
+                &:disabled {
+                    cursor: default;
+                    background-color: rgba(253,45,1,0.5);
+                }
             }
         }
     }
 }
 
 .require {
-    color: $secondary;
+    color: white;
     padding: 5px 0 0 15px;
-    height: 30px;
+    height: 50px;
+}
+
+.requireModify {
+    color: white;
+    padding: 5px 0 0 15px;
+    height: 15px;
+}
+
+.allposts-user {
+    margin-bottom: 50px;
+}
+
+@media screen and (min-width: 768px) {
+    .user-profil, .user-modify, .user-delete {
+        width: 50%;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .user-profil, .user-modify, .user-delete {
+        width: 35%;
+    }
 }

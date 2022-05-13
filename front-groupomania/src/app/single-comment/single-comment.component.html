@@ -1,55 +1,38 @@
-<div class="comment" *ngIf="comment">
-    <div class="comment-header">
-        <div class="comment-header__title">
-            <p class="comments-header__title-user">{{ comment.userName }}</p>
-            <p class="comment-header__title-created">Publiée le {{ comment.createdAt | date: "d MMMM yyyy à HH:mm" }}</p>
-            <p class="comment-header__title-updated">Modifiée le {{ comment.updatedAt | date: "d MMMM yyyy à HH:mm" }}</p>
-        </div>
-        <div class="comment-header__btn">
-            <button (click)="onContinue()">Retour à la page principale</button>
-        </div>
-    </div>
+<app-header></app-header>
 
-    <img class="comment-media" *ngIf="comment.media" [src]="comment.media" alt="image de comment">
-
-    <div class="comment-text">
-        <p class="comment-text__content">{{ comment.content }}</p>
-    </div>
-
-    <div class="comment-changes" *ngIf="changePossible === true">
-        <div class="comment-changes__formModify" >
-            <form [formGroup]= "modifyForm">
-                <div>
-                    <textarea formControlName="contentModify" id="contentModify" cols="15" rows="1" placeholder="Modifier le commentaire ?" required ></textarea>
-                </div>
-                <div>
-                    <input type="file" id="mediaModify" (change)="readUrl($event)" required >
-                </div>
-                <div>
-                    <img [src]="url" >
-                </div>
-                <div class="form-btn">
-                    <button (click)="onModify()">Modifier</button>
-                </div>
-            </form>
+<div class="comment-modify" *ngIf="comment">
+    <form [formGroup]= "modifyForm">
+        <div class="content-before">
+            <p><span>Contenu actuel :</span> {{ comment.content }}</p>
+            <textarea formControlName="contentModify" id="contentModify" cols="15" rows="2" placeholder="Modifier le texte ?" required ></textarea>
         </div>
+        <div class="img-before">
+            <p *ngIf="comment.media">Image actuelle :</p>
+            <img class="comments-media" *ngIf="comment.media" [src]="comment.media" alt="image de comment">
+            <input type="file" formControlName="mediaModify" id="mediaModify" (change)="readUrl($event)" required >
+        </div>
+        <div class="img-comment">
+            <img [src]="url" >
+        </div>
+        <div class="form-btn">
+            <button (click)="onModify()" [disabled]="contentModify.errors?.['required'] && mediaModify.errors?.['required']">Modifier</button>
+        </div>
+    </form>
+</div>
     
-        <div class="comment-changes__formDelete">
-            <form [formGroup]= "deleteForm">
-                <div>
-                    <label for="deleteName">Nom d'utilisateur :</label>
-                    <input type="text" formControlName="deleteName" id="deleteName" placeholder="Supprimer ce commentaire ?" required >
-                </div>
-                <div class="require">
-                    <p *ngIf="deleteName.errors?.['required']" ><i class="fa-solid fa-triangle-exclamation"></i> Ce champ est requis pour la suppression</p>
-                </div>
-                <div class="form-btn-black">
-                    <button (click)="onDelete(comment.commentId)" [disabled]="deleteName.errors?.['required']" >Supprimer ce post</button>
-                </div>
-                <div class="require">
-                    <p *ngIf="deleteError" ><i class="fa-solid fa-triangle-exclamation"></i> Vous ne pouvez supprimer ce post avec ce nom</p>
-                </div>
-            </form>
+<div class="comment-delete">
+    <form [formGroup]= "deleteForm">
+        <div>
+            <input type="text" formControlName="deleteName" placeholder="Nom d'utilisateur" required >
         </div>
-    </div>
+        <div class="require">
+            <p *ngIf="deleteName.errors?.['required']" ><i class="fa-solid fa-triangle-exclamation"></i> Ce champ est requis pour la suppression</p>
+        </div>
+        <div class="form-btn">
+            <button (click)="onDelete(comment.commentId)" [disabled]="deleteName.errors?.['required']" >Supprimer ce post</button>
+        </div>
+        <div class="require">
+            <p *ngIf="deleteError" ><i class="fa-solid fa-triangle-exclamation"></i> Vous ne pouvez supprimer ce post avec ce nom</p>
+        </div>
+    </form>
 </div>

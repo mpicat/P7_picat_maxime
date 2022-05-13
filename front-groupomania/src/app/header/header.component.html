@@ -9,6 +9,9 @@
     </div>
 
     <div class="bottom">
+        <div *ngIf="adminFound === 'YES'" class="admin">
+            <p>Admin</p>
+        </div>
         <div>
             <button (click)="onContinue()"><i class="fa-solid fa-house"></i></button>
         </div>

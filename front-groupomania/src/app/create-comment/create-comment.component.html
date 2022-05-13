@@ -1,16 +1,21 @@
 <div class="formComment">
     <form [formGroup]= "commentForm">
-        <div>
-            <textarea formControlName="content" id="content" cols="15" rows="1" placeholder="Un nouveau commentaire ?" required ></textarea>
+        <div class="form-left">
+            <div>
+                <textarea formControlName="content" id="content" cols="15" rows="1" placeholder="Commenter" required ></textarea>
+            </div>
+            <div>
+                <input type="file" formControlName="media" id="media" (change)="readUrl($event)" required >
+            </div>
         </div>
-        <div>
-            <input type="file" formControlName="media" id="media" (change)="readUrl($event)" required >
-        </div>
-        <div>
-            <img [src]="url" >
-        </div>
-        <div class="form-btn" (click)="onComment()">
-            <button [disabled]="content.errors?.['required'] && media.errors?.['required']">Commenter</button>
+
+        <div class="form-right">
+            <div class="form-btn" (click)="onComment()">
+                <button [disabled]="content.errors?.['required'] && media.errors?.['required']">Publier</button>
+            </div>
         </div>
     </form>
+    <div class="img-comment">
+        <img [src]="url" >
+    </div>
 </div>

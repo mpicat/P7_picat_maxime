@@ -12,10 +12,11 @@ import { ApiserviceService } from '../services/apiservice.service';
 })
 export class UserPageComponent implements OnInit {
   user!: User;
-  userFound: any;
+  userFound!: string | null;
   modifyForm: any;
   deleteForm: any;
   deleteError = false;
+  modifyError = false;
   mailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$";
   changePossible = false;
 
@@ -59,9 +60,10 @@ export class UserPageComponent implements OnInit {
 
   // able to modify/delete if good userId in localStorage
   okToChange() {
+    const isAdmin = localStorage.getItem("admin_user");
     const idUser = localStorage.getItem("id_user");
     const userId = Number(idUser);
-    if (userId === this.user.user) {
+    if (userId === this.user.user || isAdmin === 'YES') {
       this.changePossible = true;
     } else {
       this.changePossible = false;
@@ -93,15 +95,17 @@ export class UserPageComponent implements OnInit {
           this.modifyForm.reset();
           this.user.name = name;
           localStorage.setItem('name_user', name);
+          this.modifyError = false;
         });
-      });
+      }, (err) => this.modifyError = true);
     }
     // garder valeur name origine
     else if(!name && email) {
       this.service.modifyUser(userId, this.user.name, email).subscribe((res) => {
         this.modifyForm.reset();
         this.user.email = email;
-      });
+        this.modifyError = false;
+      }, (err) => this.modifyError = true);
     }
     else {
       this.service.modifyUser(userId, name, email).subscribe((res) => {
@@ -110,8 +114,9 @@ export class UserPageComponent implements OnInit {
           this.user.name = name;
           this.user.email = email;
           localStorage.setItem('name_user', name);
+          this.modifyError = false;
         });
-      });
+      }, (err) => this.modifyError = true);
     }
   }
 
@@ -119,10 +124,14 @@ export class UserPageComponent implements OnInit {
   onDelete(userId: any) {
     const val = this.deleteForm.value;
     if (val.deleteName === this.user.name) {
-      this.service.deleteUser(userId).subscribe((res) => {
-        console.log(`Utilisateur supprimé`);
-        this.onLanding();
-      })
+      this.service.modifyLikePostsUser(userId).subscribe((res) => {
+        this.service.modifyLikeCommentsUser(userId).subscribe((res) => {
+          this.service.deleteUser(userId).subscribe((res) => {
+            console.log(`Utilisateur supprimé`);
+            this.onLanding();
+          })
+        })
+      });
     } else {
       this.deleteError = true;
     }
@@ -137,5 +146,4 @@ export class UserPageComponent implements OnInit {
       this.reverseReadDataPosts = this.readDataPosts.slice().reverse();
     });
   }
-
 }

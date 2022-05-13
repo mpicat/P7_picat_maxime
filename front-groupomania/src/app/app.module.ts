@@ -19,7 +19,8 @@ import { PostComponent } from './post/post.component';
 import { UserPageComponent } from './user-page/user-page.component';
 import { CommentComponent } from './comment/comment.component';
 import { SingleCommentComponent } from './single-comment/single-comment.component';
-import { CreateCommentComponent } from './create-comment/create-comment.component'
+import { CreateCommentComponent } from './create-comment/create-comment.component';
+import { VerifyMailComponent } from './verify-mail/verify-mail.component'
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { CreateCommentComponent } from './create-comment/create-comment.componen
     UserPageComponent,
     CommentComponent,
     SingleCommentComponent,
-    CreateCommentComponent
+    CreateCommentComponent,
+    VerifyMailComponent
   ],
   imports: [
     BrowserModule,

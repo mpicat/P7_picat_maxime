@@ -12,8 +12,8 @@ import { ApiserviceService } from '../services/apiservice.service';
 export class SingleCommentComponent implements OnInit {
   modifyForm: any;
   deleteForm: any;
-  image: any;
-  url: any;
+  url!: String | ArrayBuffer | null;
+  image!: string;
   comment!: Comment;
   changePossible = false;
   deleteError = false;
@@ -22,7 +22,8 @@ export class SingleCommentComponent implements OnInit {
 
   ngOnInit(): void {
     this.modifyForm = new FormGroup({
-      contentModify: new FormControl('')
+      contentModify: new FormControl(''),
+      mediaModify: new FormControl('')
     });
     this.deleteForm = new FormGroup({
       deleteName: new FormControl('')
@@ -32,6 +33,7 @@ export class SingleCommentComponent implements OnInit {
   }
 
   get contentModify() { return this.modifyForm.get('contentModify'); }
+  get mediaModify() { return this.modifyForm.get('mediaModify'); }
   get deleteName() { return this.deleteForm.get('deleteName'); }
 
   // allow to see the pic we want to publicate
@@ -52,20 +54,8 @@ export class SingleCommentComponent implements OnInit {
     this.service.getOneComment(id).subscribe((res) => {
       this.comment = res;
       console.log(res);
-      this.okToChange();
       return this.comment;
     });
-  }
-
-  // able to modify/delete if good userId in localStorage
-  okToChange() {
-    const idUser = localStorage.getItem("id_user");
-    const userId = Number(idUser);
-    if (userId === this.comment.userId) {
-      this.changePossible = true;
-    } else {
-      this.changePossible = false;
-    }
   }
 
   // retour à l'accueil
@@ -106,7 +96,7 @@ export class SingleCommentComponent implements OnInit {
       formData.append('image', this.image[0]);
       this.service.modifyComment(commentId, null, null, formData).subscribe((res) => {
         this.modifyForm.reset();
-        window.location.reload();
+        this.router.navigateByUrl('groupomania');
       });
     }
     // case of text + image
@@ -115,7 +105,7 @@ export class SingleCommentComponent implements OnInit {
       formData.append('image', this.image[0]);
       this.service.modifyComment(commentId, null, null, formData).subscribe((res) => {
         this.modifyForm.reset();
-        window.location.reload();
+        this.router.navigateByUrl('groupomania');
       });
     }
   }
@@ -124,14 +114,9 @@ export class SingleCommentComponent implements OnInit {
   onDelete(commentId: any) {
     const val = this.deleteForm.value;
     const nameUser = localStorage.getItem("name_user");
-    if (val.deleteName === this.comment.userName && val.deleteName === nameUser) {
       this.service.deleteComment(commentId).subscribe((res) => {
         console.log(`Comment supprimé`);
         this.onContinue();
       })
-    } else {
-      this.deleteError = true;
     }
-  }
-
 }

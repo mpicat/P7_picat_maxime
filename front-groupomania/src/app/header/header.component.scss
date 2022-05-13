@@ -36,6 +36,12 @@ $tertiary: rgba(17,35,65,255);
     align-items: center;
     background-color: $tertiary;;
     column-gap: 40px;
+    .admin {
+        color: white;
+        background-color: $primary;
+        padding: 5px;
+        border-radius: 5px;
+    }
     button {
         padding: 10px;
         color: white;

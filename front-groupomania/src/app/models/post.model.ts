@@ -7,7 +7,7 @@ export class Post {
     updatedAt!: Date;
     likes!: number;
     dislikes!: number;
-    userName!: any;
+    userName!: string;
     likeposts!: any;
     comments!: any;
 }
