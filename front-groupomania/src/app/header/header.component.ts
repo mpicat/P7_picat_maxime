@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Post } from '../models/post.model';
 import { ApiserviceService } from '../services/apiservice.service';
 
 @Component({
@@ -40,7 +39,8 @@ export class HeaderComponent implements OnInit {
   // logout user
   onLogout() {
     const idUser = localStorage.getItem("id_user");
-    this.service.logout(idUser).subscribe((res) => {
+    const userId = Number(idUser);
+    this.service.logout(userId).subscribe((res) => {
       console.log('Vous venez de vous déconnecter');
       this.onLanding();
     });

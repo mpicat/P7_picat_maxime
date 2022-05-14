@@ -26,7 +26,11 @@ export class PostComponent implements OnInit {
   ngOnInit(): void {
     this.buttonAppearanceLike();
     this.okToChange();
-    this.buttonTextComments = `Voir le(s) ${this.post.comments.length} commentaire(s)`;
+    if (this.post.comments.length === 1) {
+      this.buttonTextComments = `Voir le commentaire`;
+    } else {
+      this.buttonTextComments = `Voir les ${this.post.comments.length} commentaires`;
+    }
   }
 
   onViewPost() {
@@ -112,19 +116,27 @@ export class PostComponent implements OnInit {
   allCommentsPost() {
     const postId = this.post.postId;
 
-    if (this.buttonTextComments === `Voir le(s) ${this.post.comments.length} commentaire(s)`) {
+    if (this.buttonTextComments.indexOf('Cacher') === -1 ) {
       this.service.getAllCommentsPost(postId).subscribe((res) => {
         this.readDataComments = res;
         console.log(res);
         // place les posts par ordre de création
         this.reverseReadDataComments = this.readDataComments.slice().reverse();
         this.comments = true;
-        this.buttonTextComments = "Cacher les commentaires";
+        if (this.post.comments.length > 1) {
+          this.buttonTextComments = "Cacher les commentaires";
+        } else {
+          this.buttonTextComments = "Cacher le commentaire";
+        }
+        
       });
     }
-    else {
+    else if (this.post.comments.length === 1) {
       this.comments = false;
-      this.buttonTextComments = `Voir le(s) ${this.post.comments.length} commentaire(s)`;
+      this.buttonTextComments = `Voir le commentaire`;
+    } else {
+      this.comments = false;
+      this.buttonTextComments = `Voir les ${this.post.comments.length} commentaires`;
     }
   }
 
@@ -132,6 +144,13 @@ export class PostComponent implements OnInit {
   addComment(newComment: Comment) {
     this.reverseReadDataComments.push(newComment);
     this.reverseReadDataComments = this.reverseReadDataComments.slice().reverse();
+    if (this.post.comments.length > 0 ) {
+      console.log('1er cas')
+      this.buttonTextComments = `Voir les ${this.post.comments.length + 1} commentaires`;
+    } else {
+      console.log('2eme cas')
+      this.buttonTextComments = 'Voir le commentaire';
+    }
   }
 
   // able to modify/delete if good userId in localStorage

@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { Post } from '../models/post.model';
 import { ApiserviceService } from '../services/apiservice.service';
 

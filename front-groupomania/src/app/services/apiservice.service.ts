@@ -30,7 +30,7 @@ export class ApiserviceService {
   }
 
   // verify mail User
-  verify(confirmationToken: any): Observable<any> {
+  verify(confirmationToken: string): Observable<any> {
     let confirmToken = confirmationToken;
     return this.http.get(`${this.apiUrl}/auth/verify/${confirmToken}`)
   }
@@ -49,7 +49,7 @@ export class ApiserviceService {
   }
 
   // delete User
-  deleteUser(userId: any): Observable<any> {
+  deleteUser(userId: number): Observable<any> {
     let ids = userId;
     return this.http.delete(`${this.apiUrl}/auth/delete/${ids}`).pipe(
       // tap allows to do extra effects in observable
@@ -63,13 +63,13 @@ export class ApiserviceService {
   }
 
   // modify User
-  modifyUser(userId: any, name: string, email: string): Observable<any> {
+  modifyUser(userId: number, name: string, email: string): Observable<any> {
     let ids = userId;
     return this.http.put(`${this.apiUrl}/auth/modify/${ids}`, {name, email});
   }
 
   // logout User
-  logout(id: any): Observable<any> {
+  logout(id: number | null): Observable<any> {
     let ids = id;
     console.log(ids);
     return this.http.get(`${this.apiUrl}/auth/logout/${ids}`).pipe(
@@ -84,7 +84,7 @@ export class ApiserviceService {
   }
 
   // récupération d'un user
-  getOneUser(userId: any): Observable<any> {
+  getOneUser(userId: number): Observable<any> {
     let ids = userId;
     return this.http.get(`${this.apiUrl}/auth/${ids}`);
   }
@@ -98,13 +98,13 @@ export class ApiserviceService {
   }
 
   // récupération d'un post
-  getOnePost(id: any): Observable<any> {
+  getOnePost(id: number): Observable<any> {
     let ids = id;
     return this.http.get(`${this.apiUrl}/posts/${ids}`);
   }
 
   // création d'un post
-  createPost(userId: any, content: any, userName:any, formData: any): Observable<any> {
+  createPost(userId: number | null, content: string | null, userName: string | null, formData: any): Observable<any> {
     if (formData == null) {
       return this.http.post(`${this.apiUrl}/posts`, {userId, content, userName});
     }
@@ -120,7 +120,7 @@ export class ApiserviceService {
   }
 
   // modification d'un post
-  modifyPost(postId: any, userId: any, content: any, formData: any): Observable<any> {
+  modifyPost(postId: number, userId: number | null, content: string | null, formData: any): Observable<any> {
     let ids = postId;
     if (formData == null) {
       return this.http.put(`${this.apiUrl}/posts/${ids}`, {userId, content});
@@ -131,19 +131,19 @@ export class ApiserviceService {
   }
 
   // modification du nom user de tous ses posts
-  modifyPostsUser(userId: any, userName: any): Observable<any> {
+  modifyPostsUser(userId: number, userName: string): Observable<any> {
     let ids = userId;
     return this.http.put(`${this.apiUrl}/posts/all/${ids}`, {userName});
   }
 
   // like d'un post
-  likePost(postId: any, userId: any, like: any): Observable<any> {
+  likePost(postId: number, userId: number, like: string): Observable<any> {
     let ids = postId;
     return this.http.post(`${this.apiUrl}/posts/${ids}/like`, {userId, like});
   }
 
   // modification du userId de tous les posts d'un user
-  modifyLikePostsUser(userId: any): Observable<any> {
+  modifyLikePostsUser(userId: number): Observable<any> {
     let ids = userId;
     return this.http.put(`${this.apiUrl}/posts/likeposts/${ids}`, {userId: 0});
   }
@@ -156,19 +156,19 @@ export class ApiserviceService {
   }
 
   // récupération de tous les comments d'un Post
-  getAllCommentsPost(postId: any): Observable<any> {
+  getAllCommentsPost(postId: number): Observable<any> {
     let ids = postId;
     return this.http.get(`${this.apiUrl}/comments/all/${ids}`);
   }
 
   // récupération d'un comment
-  getOneComment(id: any): Observable<any> {
+  getOneComment(id: number): Observable<any> {
     let ids = id;
     return this.http.get(`${this.apiUrl}/comments/${ids}`);
   }
 
   // création d'un comment
-  createComment(postId:any, userId: any, content: any, userName: any, formData: any): Observable<any> {
+  createComment(postId: number | null, userId: number | null, content: string | null, userName: string | null, formData: any): Observable<any> {
     if (formData == null) {
       return this.http.post(`${this.apiUrl}/comments`, {postId, userId, content, userName});
     }
@@ -178,13 +178,13 @@ export class ApiserviceService {
   }
 
   // suppression d'un comment
-  deleteComment(id: any): Observable<any> {
+  deleteComment(id: number): Observable<any> {
     let ids = id;
     return this.http.delete(`${this.apiUrl}/comments/${ids}`);
   }
 
   // modification d'un comment
-  modifyComment(commentId: any, userId: any, content: any, formData: any): Observable<any> {
+  modifyComment(commentId: number, userId: number | null, content: string | null, formData: any): Observable<any> {
     let ids = commentId;
     if (formData == null) {
       return this.http.put(`${this.apiUrl}/comments/${ids}`, {userId, content});
@@ -195,13 +195,13 @@ export class ApiserviceService {
   }
 
   // like et dislike d'un comment
-  likeComment(commentId: any, userId: any, like: any): Observable<any> {
+  likeComment(commentId: number, userId: number, like: string): Observable<any> {
     let ids = commentId;
     return this.http.post(`${this.apiUrl}/comments/${ids}/like`, {userId, like});
   }
 
   // modification du userId de tous les comments d'un user
-  modifyLikeCommentsUser(userId: any): Observable<any> {
+  modifyLikeCommentsUser(userId: number): Observable<any> {
     let ids = userId;
     return this.http.put(`${this.apiUrl}/comments/likecomments/${ids}`, {userId: 0});
   }

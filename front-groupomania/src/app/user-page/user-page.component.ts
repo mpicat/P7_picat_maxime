@@ -20,10 +20,11 @@ export class UserPageComponent implements OnInit {
   mailPattern = "^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$";
   changePossibleName = false;
   changePossibleDelete = false;
-
-  constructor(private service: ApiserviceService, private router: Router, private route: ActivatedRoute) { }
   readDataPosts!: Post[];
   reverseReadDataPosts: Array<any> = [];
+
+  constructor(private service: ApiserviceService, private router: Router, private route: ActivatedRoute) {}
+  
 
   ngOnInit(): void {
     this.getNameUser();
@@ -34,10 +35,15 @@ export class UserPageComponent implements OnInit {
     this.deleteForm = new FormGroup({
       deleteName: new FormControl(''),
     });
-    const userId = +this.route.snapshot.params['id'];
-    this.oneUser(userId);
-    this.allPosts();
+
+    // allow to reload the component when change in route params
+    this.route.params.subscribe((res) => {
+      const userId = +this.route.snapshot.params['id'];
+      this.oneUser(userId);
+      this.allPosts();
+    })
   }
+
 
   get name() { return this.modifyForm.get('name'); }
   get email() { return this.modifyForm.get('email'); }

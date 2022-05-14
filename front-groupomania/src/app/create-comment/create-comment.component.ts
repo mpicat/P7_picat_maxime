@@ -70,7 +70,7 @@ export class CreateCommentComponent implements OnInit {
         this.commentForm.reset();
         this.url = "";
         this.newCommentEvent.emit(res.data);
-        this.post.comments.push({ userId: userId })
+        this.post.comments.push({ userId: userId });
       });
     }
     // comment text + image
@@ -81,6 +81,7 @@ export class CreateCommentComponent implements OnInit {
         this.commentForm.reset();
         this.url = "";
         this.newCommentEvent.emit(res.data);
+        this.post.comments.push({ userId: userId });
       });
     }
   }
