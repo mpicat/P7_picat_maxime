@@ -2,7 +2,7 @@
 
 
 
-## Prérequis :
+## Prérequis
 <ul>
     <li>Git</li>
     <li>Node.js et nvm.setup</li>
@@ -13,9 +13,9 @@ Créer un dossier vide puis cloner ce repository à l'intérieur
 
 
 
-## MySQL :
+## MySQL
 
-Dans le fichier back, créer un dossier .en, puis à l'intérieur placer ces informations pour connecter votre future base de données MySQL : 
+Dans le dossier back, créer un fichier .en, puis à l'intérieur placer ces informations pour connecter votre future base de données MySQL : 
 <ul>
     <li>DB_DATABASE = "groupomania"</li>
     <li>DB_USER = "root"</li>
@@ -30,7 +30,7 @@ Ajouter le mail de votre admin :
 </ul>
 
 
-Ouvrir MySQL Command Line Client puis effectuer les deux lignes de code suivantes :
+Ouvrir MySQL Command Line Client, puis effectuer les deux lignes de code suivantes :
 
 ```
 CREATE DATABASE groupomania;
@@ -48,11 +48,11 @@ Ouvrir MySQL Workbench et se connecter sur la database groupomania créée préc
 
 
 ## SENDGRID
-(Cette partie permet l'envoi de mails par l'application aux users lors de leur création de compte)
+(Cette partie permet l'envoi de mails aux utilisateurs par l'application lors de leur création de compte)
 <ul>
    <li>Aller sur le site de sendgrid : https://sendgrid.com/</li>
    <li>Créer un compte</li>
-   <li>Puis une fois sur votre compte, cliquer sur settings, puis sender authentification</li>
+   <li>Une fois sur votre compte, cliquer sur settings, puis sender authentification</li>
    <li>Cliquer sur verify a single sender</li>
    <li>Créer le sender puis cliquer sur Create</li>
    <li>Une fois créé, revenir dans settings et cliquer sur API keys</li>
@@ -61,7 +61,7 @@ Ouvrir MySQL Workbench et se connecter sur la database groupomania créée préc
    <li>Sélectionnez Resctricted Access</li>
    <li>Cliquez sur Mail Send et sélectionner tout (en cliquant à droite) puis cliquer sur Create & View</li>
    <li>Cliquer sur Done</li>
-   <li>Une fois la clé obtenue, aller dans le dossier .env précédemment créé, créer : API_KEY_NAME = "nom-de-votre-key-sendgrid"</li>
+   <li>Une fois la clé obtenue, aller dans le dossier .env précédemment créé, et créer : API_KEY_NAME = "nom-de-votre-key-sendgrid"</li>
 </ul>
 
 
