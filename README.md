@@ -37,12 +37,12 @@ CREATE DATABASE groupomania;
 USE groupomania;
 ```
 
-Ouvrir MySQL Workbench et se connecter sur la database groupomania créée précédemment, puis :
+Ouvrir MySQL Workbench, se connecter puis sélectionner la database groupomania créée précédemment, puis dans l'onglet Query :
 <ul>
-    <li>Cliquer sur Server</li>
-    <li>Cliquer sur Data import</li>
-    <li>Cliquer sur les ... et sélectionnez le dossier groupomania depuis le repository cloné</li>
-    <li>Cliquer sur Start Import</li>
+    <li>Cliquer sur l'icône "open a script file in this editor"</li>
+    <li>Sélectionner un fichier .sql depuis le dossier groupomania récupéré avec le clone github</li>
+    <li>Ouvrez le puis cliquez sur l'icône éclair "execute"</li>
+    <li>Recommencez pour chaque fichier .sql du dossier, chacun représentant une table de la base de données</li>
 </ul>
 
 
@@ -86,7 +86,7 @@ node server
 Ouvrir un autre terminal dans le dossier front-groupomania puis effectuer les lignes de commandes suivantes :
 ```
 npm install
-npm run serve
+ng serve
 ```
 
 Ouvrir le navigateur à l'adresse http://localhost:4200/
