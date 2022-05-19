@@ -3,11 +3,12 @@
 <div class="post-modify" *ngIf="post">
     <form [formGroup]= "modifyForm">
         <div class="content-before">
-            <p><span>Contenu actuel :</span> {{ post.content }}</p>
+            <label for="contentModify">Contenu actuel :</label>
+            <p>{{ post.content }}</p>
             <textarea formControlName="contentModify" id="contentModify" cols="15" rows="2" placeholder="Modifier le texte ?" required ></textarea>
         </div>
         <div class="img-before">
-            <p *ngIf="post.media">Image actuelle :</p>
+            <label for="mediaModify">Image actuelle :</label>
             <img class="posts-media" *ngIf="post.media" [src]="post.media" alt="image de post">
             <input type="file" formControlName="mediaModify" id="mediaModify" (change)="readUrl($event)" required >
         </div>
@@ -23,7 +24,8 @@
 <div class="post-delete">
     <form [formGroup]= "deleteForm">
         <div>
-            <input type="text" formControlName="deleteName" placeholder="Nom d'utilisateur" required >
+            <label for="deletePost">Nom :</label>
+            <input type="text" formControlName="deleteName" placeholder="Nom d'utilisateur" id="deletePost" required >
         </div>
         <div class="require">
             <p *ngIf="deleteName.errors?.['required']" ><i class="fa-solid fa-triangle-exclamation"></i> Ce champ est requis pour la suppression</p>

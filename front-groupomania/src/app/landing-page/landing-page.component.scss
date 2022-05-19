@@ -48,6 +48,10 @@ main {
         display: flex;
         flex-direction: column;
         row-gap: 10px;
+        label {
+            color: $tertiary;
+            font-size: 1.1rem;
+        }
         .form-input {
             &__title {
                 display: flex;
@@ -77,6 +81,7 @@ main {
     color: $tertiary;
     padding: 5px;
     height: 25px;
+    font-style: italic;
 }
 
 .form-signup {

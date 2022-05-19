@@ -14,6 +14,10 @@ $tertiary: rgba(17,35,65,255);
         justify-content: center;
         row-gap: 10px;
         width: 85%;
+        label {
+            color: white;
+            text-decoration: underline;
+        }
         .content-before {
             padding-bottom: 10px;
             p {
@@ -94,6 +98,10 @@ $tertiary: rgba(17,35,65,255);
         justify-content: center;
         row-gap: 10px;
         width: 85%;
+        label {
+            color: white;
+            text-decoration: underline;
+        }
         input {
             width: 100%;
             padding: 7px;

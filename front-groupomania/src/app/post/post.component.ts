@@ -145,10 +145,8 @@ export class PostComponent implements OnInit {
     this.reverseReadDataComments.push(newComment);
     this.reverseReadDataComments = this.reverseReadDataComments.slice().reverse();
     if (this.post.comments.length > 0 ) {
-      console.log('1er cas')
       this.buttonTextComments = `Voir les ${this.post.comments.length + 1} commentaires`;
     } else {
-      console.log('2eme cas')
       this.buttonTextComments = 'Voir le commentaire';
     }
   }

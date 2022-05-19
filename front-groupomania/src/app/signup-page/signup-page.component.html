@@ -7,9 +7,10 @@
 
     <form [formGroup]= "userForm">
         <div class="form-input">
+            <label for="name">Nom :</label>
             <div class="form-input__title">
                 <i class="fa-solid fa-user"></i>
-                <input type="text" formControlName="name" placeholder="Nom" required>
+                <input type="text" formControlName="name" placeholder="Nom" id="name" required>
             </div>
             <div class="require">
                 <p *ngIf="name.errors?.['required']" ><i class="fa-solid fa-triangle-exclamation"></i> Ce champ est requis</p>
@@ -17,9 +18,10 @@
         </div>
 
         <div class="form-input">
+            <label for="mail">Mail :</label>
             <div class="form-input__title">
                 <i class="fa-solid fa-envelope"></i>
-                <input type="email" formControlName="email" placeholder="Email" required>
+                <input type="email" formControlName="email" placeholder="Email" id="mail" required>
             </div>
             <div class="require">
                 <p *ngIf="email.errors?.['required']" ><i class="fa-solid fa-triangle-exclamation"></i> Ce champ est requis</p>
@@ -28,17 +30,19 @@
         </div>
 
         <div class="form-input">
+            <label for="password">Mot de passe :</label>
             <div class="form-input__title">
                 <i class="fa-solid fa-lock"></i>
-                <input type="password" formControlName="password" placeholder="Mot de passe" required>
+                <input type="password" formControlName="password" placeholder="Mot de passe" id="password" required>
             </div>
             <div class="require">
                 <p *ngIf="password.errors?.['required']" ><i class="fa-solid fa-triangle-exclamation"></i> Ce champ est requis</p>
             </div>
 
+            <label for="password2">Mot de passe :</label>
             <div class="form-input__title">
                 <i class="fa-solid fa-lock"></i>
-                <input type="password" formControlName="passwordVerif" placeholder="Vérifiez votre mot de passe" required>
+                <input type="password" formControlName="passwordVerif" placeholder="Vérifiez votre mot de passe" id="password2" required>
             </div>
             <div class="require">
                 <p *ngIf="passwordVerif.errors?.['required']" ><i class="fa-solid fa-triangle-exclamation"></i> Ce champ est requis</p>

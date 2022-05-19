@@ -127,6 +127,28 @@ exports.modifyComment = (req, res, next) => {
     }
 };
 
+// UPDATE ALL COMMENTS FROM ONE USER
+exports.modifyCommentsUser = (req, res, next) => {
+    const commentObject = req.file ?
+        {
+            ...JSON.parse(req.body.comment),
+            media: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        } : {...req.body};
+    if (req.isAdmin && req.isAdmin === process.env.ADMIN_TOKEN) {
+        Comment.update({...commentObject, userId: Comment.userId}, {where: {userId: req.params.id}})
+        .then(() => res.status(200).json({ message: "Comments modifiés par l'admin!"}))
+        .catch(error => res.status(400).json({ message: "Comments non modifiés par l'admin!"}));
+    }
+    else if (req.error) {
+        res.status(403).json({error: "Non autorisé"});
+    } 
+    else {
+        Comment.update({...commentObject, userId: req.params.id}, {where: {userId: req.params.id}})
+        .then(() => res.status(200).json({ message: 'Comments modifiés !'}))
+        .catch(error => res.status(400).json({ message: 'Comments non modifiés !'}));
+    }
+};
+
 
 // OPINION ABOUT A COMMENT
 exports.likeComment = async (req, res, next) => {

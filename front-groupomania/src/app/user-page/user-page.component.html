@@ -11,10 +11,12 @@
         <div class="user-modify" *ngIf="changePossibleName === true">
             <form [formGroup]= "modifyForm">
                 <div>
-                    <input type="text" formControlName="name" placeholder="Modifier votre nom ?" required >
+                    <label for="name">Nom :</label>
+                    <input type="text" formControlName="name" placeholder="Modifier votre nom ?" id="name" required >
                 </div>
                 <div>
-                    <input type="email" formControlName="email" placeholder="Modifier votre email ?" required >
+                    <label for="mail">Email :</label>
+                    <input type="email" formControlName="email" placeholder="Modifier votre email ?" id="mail" required >
                 </div>
                 <div class="form-btn">
                     <button (click)="onModify()" [disabled]="name.errors?.['required'] && email.errors?.['required'] || email.errors?.['pattern']">Modifier</button>
@@ -28,6 +30,7 @@
         <div class="user-delete" *ngIf="changePossibleDelete === true">
             <form [formGroup]= "deleteForm">
                 <div>
+                    <label for="deleteName">Nom :</label>
                     <input type="text" formControlName="deleteName" id="deleteName" placeholder="Nom d'utilisateur" required >
                 </div>
                 <div class="require">

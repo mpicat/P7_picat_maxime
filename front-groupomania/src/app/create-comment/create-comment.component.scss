@@ -16,6 +16,9 @@ $tertiary: rgba(17,35,65,255);
             flex-direction: column;
             width: 65%;
             row-gap: 5px;
+            label {
+                font-size: 1.1rem;
+            }
             textarea {
                 width: 100%;
                 padding: 5px;

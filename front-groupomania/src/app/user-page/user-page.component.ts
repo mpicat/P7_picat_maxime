@@ -111,10 +111,12 @@ export class UserPageComponent implements OnInit {
       // garder valeur email origine
       this.service.modifyUser(userId, name, this.user.email).subscribe((res) => {
         this.service.modifyPostsUser(userId, name).subscribe((res) => {
-          this.modifyForm.reset();
-          this.user.name = name;
-          localStorage.setItem('name_user', name);
-          this.modifyError = false;
+          this.service.modifyCommentsUser(userId, name).subscribe((res) => {
+            this.modifyForm.reset();
+            this.user.name = name;
+            localStorage.setItem('name_user', name);
+            this.modifyError = false;
+          })
         });
       }, (err) => this.modifyError = true);
     }

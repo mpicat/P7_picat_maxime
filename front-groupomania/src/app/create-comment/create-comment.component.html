@@ -2,9 +2,11 @@
     <form [formGroup]= "commentForm">
         <div class="form-left">
             <div>
+                <label for="content">Contenu :</label>
                 <textarea formControlName="content" id="content" cols="15" rows="1" placeholder="Commenter" required ></textarea>
             </div>
             <div>
+                <label for="media">Media :</label>
                 <input type="file" formControlName="media" id="media" (change)="readUrl($event)" required >
             </div>
         </div>

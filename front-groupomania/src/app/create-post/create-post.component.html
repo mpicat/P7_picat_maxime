@@ -1,9 +1,11 @@
 <div class="formPost">
     <form [formGroup]= "postForm">
         <div>
+            <label for="content">Contenu :</label>
             <textarea formControlName="content" id="content" cols="15" rows="2" placeholder="Quoi de neuf ?" required ></textarea>
         </div>
         <div>
+            <label for="media-post">Media :</label><br>
             <input type="file" formControlName="media" id="media" (change)="readUrl($event)" >
         </div>
         <div class="img-post">

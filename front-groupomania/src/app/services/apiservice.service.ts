@@ -194,7 +194,13 @@ export class ApiserviceService {
     }
   }
 
-  // like et dislike d'un comment
+  // modification du nom user de tous ses comments
+  modifyCommentsUser(userId: number, userName: string): Observable<any> {
+    let ids = userId;
+    return this.http.put(`${this.apiUrl}/comments/allcomments/${ids}`, {userName});
+  }
+
+  // like d'un comment
   likeComment(commentId: number, userId: number, like: string): Observable<any> {
     let ids = commentId;
     return this.http.post(`${this.apiUrl}/comments/${ids}/like`, {userId, like});
