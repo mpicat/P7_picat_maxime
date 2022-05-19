@@ -15,7 +15,7 @@ Créer un dossier vide puis cloner ce repository à l'intérieur
 
 ## MySQL
 
-Dans le dossier back, créer un fichier .en, puis à l'intérieur placer ces informations pour connecter votre future base de données MySQL : 
+Dans le dossier back, créer un fichier .env, puis à l'intérieur placer ces informations pour connecter votre future base de données MySQL : 
 <ul>
     <li>DB_DATABASE = "groupomania"</li>
     <li>DB_USER = "root"</li>
@@ -68,7 +68,7 @@ Ouvrir MySQL Workbench, se connecter puis sélectionner la database groupomania 
 
 ## BACK END
 
-Dans le dossier .env précédemment créé, créer :
+Dans le fichier .env précédemment créé, créer :
 <ul>
     <li>SECRET_TOKEN = "nom-de-votre-token"</li>
     <li>ADMIN_TOKEN = "nom-de-votre-token-admin"</li>
