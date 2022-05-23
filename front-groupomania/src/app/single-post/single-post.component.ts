@@ -113,10 +113,16 @@ export class SinglePostComponent implements OnInit {
   onDelete(postId: any) {
     const val = this.deleteForm.value;
     const nameUser = localStorage.getItem("name_user");
+    const isAdmin = localStorage.getItem("admin_user");
 
-    this.service.deletePost(postId).subscribe((res) => {
-      console.log(`Post supprimé`);
-      this.onContinue();
-    })
+    if ((val.deleteName === nameUser || isAdmin === 'YES')) {
+      this.service.deletePost(postId).subscribe((res) => {
+        console.log(`Post supprimé`);
+        this.onContinue();
+      })
+    }
+    else {
+      this.deleteError = true;
+    }
   }
 }

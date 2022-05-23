@@ -114,9 +114,16 @@ export class SingleCommentComponent implements OnInit {
   onDelete(commentId: any) {
     const val = this.deleteForm.value;
     const nameUser = localStorage.getItem("name_user");
+    const isAdmin = localStorage.getItem("admin_user");
+
+    if ((val.deleteName === nameUser || isAdmin === 'YES')) {
       this.service.deleteComment(commentId).subscribe((res) => {
         console.log(`Comment supprimé`);
         this.onContinue();
       })
+    }
+    else {
+      this.deleteError = true;
+    }
     }
 }

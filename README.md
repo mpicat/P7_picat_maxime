@@ -90,3 +90,7 @@ ng serve
 ```
 
 Ouvrir le navigateur à l'adresse http://localhost:4200/
+
+
+## APPLICATION
+Créer l'utilisateur ADMIN avant tout autre utilisateur.
